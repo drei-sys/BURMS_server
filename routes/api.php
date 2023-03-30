@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\SubjectController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +19,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::middleware(['auth'])->get('/subjects', [SubjectController::class, 'get']);
+Route::middleware(['auth'])->get('/subject/{id}', [SubjectController::class, 'getOne']);
+Route::middleware(['auth'])->post('/subject', [SubjectController::class, 'store']);
+Route::middleware(['auth'])->put('/subject/{id}', [SubjectController::class, 'update']);
+Route::middleware(['auth'])->delete('/subject/{id}', [SubjectController::class, 'destroy']);
+
+
