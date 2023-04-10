@@ -7,6 +7,9 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\NonTeaching;
 use App\Models\Registrar;
+use App\Models\Dean;
+use App\Models\DeptChair;
+
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -43,6 +46,12 @@ class UserController extends Controller
         }else if($userType === 6){
             $userDetails = Registrar::find($userId);
             return response()->json($userDetails);
+        }else if($userType === 7){
+            $userDetails = Dean::find($userId);
+            return response()->json($userDetails);
+        }else if($userType === 8){
+            $userDetails = DeptChair::find($userId);
+            return response()->json($userDetails);
         }else{
             return response()->json([]);
         }
@@ -54,7 +63,21 @@ class UserController extends Controller
         $teachers = Teacher::where('status', 'for_approval')->orderBy('name')->get();
         $nonTeachings = NonTeaching::where('status', 'for_approval')->orderBy('name')->get();
         $registrars = Registrar::where('status', 'for_approval')->orderBy('name')->get();
-        $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars];    
+        $deans = Dean::where('status', 'for_approval')->orderBy('name')->get();
+        $deptChairs = DeptChair::where('status', 'for_approval')->orderBy('name')->get();
+        $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
+        return response()->json($users);
+    }
+
+    public function getBlockchainUsers(Request $request): JsonResponse
+    {                                        
+        $students = Student::orderBy('name')->get();
+        $teachers = Teacher::orderBy('name')->get();
+        $nonTeachings = NonTeaching::orderBy('name')->get();
+        $registrars = Registrar::orderBy('name')->get();
+        $deans = Dean::orderBy('name')->get();
+        $deptChairs = DeptChair::orderBy('name')->get();
+        $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
         return response()->json($users);
     }
 
@@ -85,6 +108,16 @@ class UserController extends Controller
             return response()->json([]);
         }else if($userType === '6') {
             Registrar::where('id', $id)->update([
+                'status'=> $request->status,            
+            ]);
+            return response()->json([]);
+        }else if($userType === '7') {
+            Dean::where('id', $id)->update([
+                'status'=> $request->status,            
+            ]);
+            return response()->json([]);
+        }else if($userType === '8') {
+            DeptChair::where('id', $id)->update([
                 'status'=> $request->status,            
             ]);
             return response()->json([]);
@@ -119,6 +152,20 @@ class UserController extends Controller
             return response()->json([]);
         }else if($userType === 6) {
             Registrar::where('id', $id)->update([
+                'name'=> $request->name,            
+                'hash'=> Hash::make(Carbon::now()),            
+                'status'=> 'uneditable',            
+            ]);
+            return response()->json([]);
+        }else if($userType === 7) {
+            Dean::where('id', $id)->update([
+                'name'=> $request->name,            
+                'hash'=> Hash::make(Carbon::now()),            
+                'status'=> 'uneditable',            
+            ]);
+            return response()->json([]);
+        }else if($userType === 8) {
+            DeptChair::where('id', $id)->update([
                 'name'=> $request->name,            
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'uneditable',            

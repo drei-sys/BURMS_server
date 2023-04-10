@@ -9,6 +9,8 @@ use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SchoolYearSectionController;
+use App\Http\Controllers\EnrollmentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Route::middleware(['auth'])->get('/users', [UserController::class, 'get']);
 Route::middleware(['auth'])->get('/user/{id}', [UserController::class, 'getOne']);
 Route::middleware(['auth'])->get('/userDetails', [UserController::class, 'getUserDetails']);
 Route::middleware(['auth'])->get('/profileEditApprovals', [UserController::class, 'getProfileEditApprovals']);
+Route::middleware(['auth'])->get('/blockChainUsers', [UserController::class, 'getBlockchainUsers']);
 Route::middleware(['auth'])->put('/verifyUser/{id}', [UserController::class, 'verify']);
 Route::middleware(['auth'])->put('/userDetailsStatus/{id}/{userType}', [UserController::class, 'updateUserDetailsStatus']);
 Route::middleware(['auth'])->put('/userDetails/{id}', [UserController::class, 'updateUserDetails']);
@@ -62,6 +65,8 @@ Route::middleware(['auth'])->get('/schoolYearSection/{syId}', [SchoolYearSection
 Route::middleware(['auth'])->get('/schoolYearSectionFormData/{syId}', [SchoolYearSectionController::class, 'getFormData']);
 Route::middleware(['auth'])->post('/schoolYearSection', [SchoolYearSectionController::class, 'store']);
 Route::middleware(['auth'])->delete('/schoolYearSection/{syId}/{sectionId}', [SchoolYearSectionController::class, 'destroy']);
+
+Route::middleware(['auth'])->post('/enrollment', [EnrollmentController::class, 'store']);
 
 
 //Route::middleware(['auth'])->get('/enroll/{syId}', [SchoolYearSectionController::class, 'get']);

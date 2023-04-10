@@ -8,6 +8,9 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\NonTeaching;
 use App\Models\Registrar;
+use App\Models\Dean;
+use App\Models\DeptChair;
+
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -71,6 +74,26 @@ class RegisteredUserController extends Controller
             ]);
         }else if($request->user_type === 6){
             Registrar::create([        
+                'id' => $user->id,
+                'name' => $request->name,
+                'user_type' => $request->user_type,
+                'status' => 'uneditable',                
+                'hash' => Hash::make(Carbon::now()),
+                'created_by' => $user->id,
+                'updated_by' => $user->id,            
+            ]);
+        }else if($request->user_type === 7){
+            Dean::create([        
+                'id' => $user->id,
+                'name' => $request->name,
+                'user_type' => $request->user_type,
+                'status' => 'uneditable',                
+                'hash' => Hash::make(Carbon::now()),
+                'created_by' => $user->id,
+                'updated_by' => $user->id,            
+            ]);
+        }else if($request->user_type === 8){
+            DeptChair::create([        
                 'id' => $user->id,
                 'name' => $request->name,
                 'user_type' => $request->user_type,
