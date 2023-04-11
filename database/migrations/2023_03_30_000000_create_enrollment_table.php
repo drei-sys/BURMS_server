@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('student_id');           
             $table->integer('sy_id');           
             $table->string('status');           
+            $table->string('remarks');           
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();

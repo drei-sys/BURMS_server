@@ -15,6 +15,7 @@ class Enrollment extends Model
         'student_id',
         'sy_id',
         'status',
+        'remarks',
         'created_by',
         'updated_by',
     ];

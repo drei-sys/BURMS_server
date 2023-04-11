@@ -69,4 +69,8 @@ Route::middleware(['auth'])->delete('/schoolYearSection/{syId}/{sectionId}', [Sc
 Route::middleware(['auth'])->post('/enrollment', [EnrollmentController::class, 'store']);
 
 
-//Route::middleware(['auth'])->get('/enroll/{syId}', [SchoolYearSectionController::class, 'get']);
+Route::middleware(['auth'])->get('/enrollments', [EnrollmentController::class, 'get']);
+Route::middleware(['auth'])->get('/enrollments/{studentId}', [EnrollmentController::class, 'getStudentEnrollment']);
+Route::middleware(['auth'])->get('/enrollmentItems/{enrollmentId}', [EnrollmentController::class, 'getEnrollmentItems']);
+Route::middleware(['auth'])->put('/approveEnrollment/{id}', [EnrollmentController::class, 'approve']);
+Route::middleware(['auth'])->put('/rejectEnrollment/{id}', [EnrollmentController::class, 'reject']);
