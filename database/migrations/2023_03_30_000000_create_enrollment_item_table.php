@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('enrollment_id');           
             $table->integer('sy_id');
             $table->integer('course_id');           
+            $table->integer('student_id');           
             $table->integer('section_id');           
             $table->integer('subject_id');
             $table->integer('created_by');

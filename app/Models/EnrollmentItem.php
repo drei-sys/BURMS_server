@@ -15,6 +15,7 @@ class EnrollmentItem extends Model
         'enrollment_id',
         'sy_id',
         'course_id',
+        'student_id',
         'section_id',
         'subject_id',
         'created_by',

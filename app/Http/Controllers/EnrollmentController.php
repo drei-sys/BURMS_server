@@ -105,6 +105,7 @@ class EnrollmentController extends Controller
                 'enrollment_id' => $enrollment->id,
                 'sy_id' => $enrollmentItem['sy_id'],
                 'course_id' => $enrollmentItem['course_id'],
+                'student_id' => auth()->user()->id,
                 'section_id' => $enrollmentItem['section_id'],
                 'subject_id' => $enrollmentItem['subject_id'],
                 'created_by' => auth()->user()->id,
