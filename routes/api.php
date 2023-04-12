@@ -10,6 +10,7 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SchoolYearSectionController;
 use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\AssignedTeacherController;
 
 
 /*
@@ -66,11 +67,16 @@ Route::middleware(['auth'])->get('/schoolYearSectionFormData/{syId}', [SchoolYea
 Route::middleware(['auth'])->post('/schoolYearSection', [SchoolYearSectionController::class, 'store']);
 Route::middleware(['auth'])->delete('/schoolYearSection/{syId}/{sectionId}', [SchoolYearSectionController::class, 'destroy']);
 
-Route::middleware(['auth'])->post('/enrollment', [EnrollmentController::class, 'store']);
-
-
 Route::middleware(['auth'])->get('/enrollments', [EnrollmentController::class, 'get']);
 Route::middleware(['auth'])->get('/enrollments/{studentId}', [EnrollmentController::class, 'getStudentEnrollment']);
 Route::middleware(['auth'])->get('/enrollmentItems/{enrollmentId}', [EnrollmentController::class, 'getEnrollmentItems']);
+Route::middleware(['auth'])->post('/enrollment', [EnrollmentController::class, 'store']);
 Route::middleware(['auth'])->put('/approveEnrollment/{id}', [EnrollmentController::class, 'approve']);
 Route::middleware(['auth'])->put('/rejectEnrollment/{id}', [EnrollmentController::class, 'reject']);
+
+Route::middleware(['auth'])->get('/assignedTeachers/{syId}', [AssignedTeacherController::class, 'get']);
+Route::middleware(['auth'])->get('/assignedTeacher/{id}', [AssignedTeacherController::class, 'getOne']);
+Route::middleware(['auth'])->get('/assignTeacherFormData', [AssignedTeacherController::class, 'getFormData']);
+Route::middleware(['auth'])->post('/assignTeacher', [AssignedTeacherController::class, 'store']);
+Route::middleware(['auth'])->put('/assignedTeacher/{id}', [AssignedTeacherController::class, 'update']);
+Route::middleware(['auth'])->delete('/assignedTeacher/{id}', [AssignedTeacherController::class, 'destroy']);

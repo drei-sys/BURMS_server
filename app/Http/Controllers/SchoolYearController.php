@@ -34,8 +34,6 @@ class SchoolYearController extends Controller
         return response()->json($schoolYear);
     }
 
-    
-
     public function store(Request $request): JsonResponse
     {
         $schoolYear = SchoolYear::create([
