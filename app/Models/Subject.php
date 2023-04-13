@@ -14,6 +14,7 @@ class Subject extends Model
     protected $fillable = [
         'code',
         'name',
+        'unit',
         'status',
         'created_by',
         'updated_by',

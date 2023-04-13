@@ -30,8 +30,8 @@ class SubjectController extends Controller
         $subject = Subject::create([
             'code'=> $request->code,
             'name' => $request->name,
-            'status' => $request->status,
-            'email' => $request->email,
+            'unit' => $request->unit,
+            'status' => $request->status,            
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,            
         ]);
@@ -48,6 +48,7 @@ class SubjectController extends Controller
         Subject::where('id', $id)->update([
             'code'=> $request->code,
             'name' => $request->name,
+            'unit' => $request->unit,
         ]);
         return response()->json([]);
     }

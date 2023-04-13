@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->string('name');
+            $table->integer('unit');
             $table->string('status');            
             $table->integer('created_by');
             $table->integer('updated_by');            
