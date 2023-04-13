@@ -24,12 +24,12 @@ return new class extends Migration
             $table->text('prelims_items');         
             $table->text('midterm_items');         
             $table->text('finals_items');
-            $table->decimal('prelim_grade', 8, 2);
+            $table->decimal('prelims_grade', 8, 2);
             $table->decimal('midterm_grade', 8, 2);
             $table->decimal('finals_grade', 8, 2);
             $table->decimal('final_grade', 8, 2);
             $table->decimal('equivalent', 8, 2);
-            $table->string('remarks', 8, 2);
+            $table->string('remarks');
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();
