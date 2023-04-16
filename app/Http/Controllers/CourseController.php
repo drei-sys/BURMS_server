@@ -11,7 +11,7 @@ class CourseController extends Controller
     //
     public function get(Request $request): JsonResponse
     {            
-        $courses = Course::whereNot('status', 'deleted')->orderBy('name')->get();
+        $courses = Course::whereNot('status', 'Deleted')->orderBy('name')->get();
         return response()->json($courses);
     }
 
@@ -24,7 +24,7 @@ class CourseController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => ['required', Rule::unique('course')->where('status' , 'active')],
+            'name' => ['required', Rule::unique('course')->where('status' , 'Active')],
         ]);
 
         $course = Course::create([            
@@ -41,7 +41,7 @@ class CourseController extends Controller
     public function update(Request $request, $id): JsonResponse
     {            
         $request->validate([
-            'name' => ['required', Rule::unique('course')->where('status' , 'active')->ignore($id)],
+            'name' => ['required', Rule::unique('course')->where('status' , 'Active')->ignore($id)],
         ]);
 
         Course::where('id', $id)->update([            
@@ -53,7 +53,7 @@ class CourseController extends Controller
     public function destroy(Request $request, $id): JsonResponse
     {            
         Course::where('id', $id)->update([
-            'status'=> 'deleted',            
+            'status'=> 'Deleted',            
         ]);
         return response()->json([]);
     }

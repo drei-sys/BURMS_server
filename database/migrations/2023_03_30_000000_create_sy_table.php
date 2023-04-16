@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sy', function (Blueprint $table) {
             $table->id();
             $table->string('year');
-            $table->integer('semester');
+            $table->string('semester');
             $table->string('status');
             $table->integer('created_by');
             $table->integer('updated_by');            

@@ -11,7 +11,7 @@ class SectionController extends Controller
     //
     public function get(Request $request): JsonResponse
     {            
-        $sections = Section::whereNot('status', 'deleted')->orderBy('name')->get();
+        $sections = Section::whereNot('status', 'Deleted')->orderBy('name')->get();
         return response()->json($sections);
     }
 
@@ -24,7 +24,7 @@ class SectionController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => ['required', Rule::unique('section')->where('status' , 'active')],
+            'name' => ['required', Rule::unique('section')->where('status' , 'Active')],
         ]);
 
         $section = Section::create([            
@@ -41,7 +41,7 @@ class SectionController extends Controller
     public function update(Request $request, $id): JsonResponse
     {            
         $request->validate([
-            'name' => ['required', Rule::unique('section')->where('status' , 'active')->ignore($id)],
+            'name' => ['required', Rule::unique('section')->where('status' , 'Active')->ignore($id)],
         ]);
 
         Section::where('id', $id)->update([            
@@ -53,7 +53,7 @@ class SectionController extends Controller
     public function destroy(Request $request, $id): JsonResponse
     {            
         Section::where('id', $id)->update([
-            'status'=> 'deleted',            
+            'status'=> 'Deleted',            
         ]);
         return response()->json([]);
     }

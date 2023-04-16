@@ -11,7 +11,7 @@ class SubjectController extends Controller
     //
     public function get(Request $request): JsonResponse
     {            
-        $subjects = Subject::whereNot('status', 'deleted')->orderBy('name')->get();
+        $subjects = Subject::whereNot('status', 'Deleted')->orderBy('name')->get();
         return response()->json($subjects);
     }
 
@@ -24,7 +24,7 @@ class SubjectController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'code' => ['required', Rule::unique('subject')->where('status' , 'active')],
+            'code' => ['required', Rule::unique('subject')->where('status' , 'Active')],
         ]);
 
         $subject = Subject::create([
@@ -32,6 +32,7 @@ class SubjectController extends Controller
             'name' => $request->name,
             'unit' => $request->unit,
             'status' => $request->status,            
+            'type' => $request->type,            
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,            
         ]);
@@ -42,22 +43,25 @@ class SubjectController extends Controller
     public function update(Request $request, $id): JsonResponse
     {            
         $request->validate([
-            'code' => ['required', Rule::unique('subject')->where('status' , 'active')->ignore($id)],
+            'code' => ['required', Rule::unique('subject')->where('status' , 'Active')->ignore($id)],
         ]);
 
         Subject::where('id', $id)->update([
             'code'=> $request->code,
             'name' => $request->name,
             'unit' => $request->unit,
+            'type' => $request->type,
         ]);
+
         return response()->json([]);
     }
 
     public function destroy(Request $request, $id): JsonResponse
     {            
         Subject::where('id', $id)->update([
-            'status'=> 'deleted',            
+            'status'=> 'Deleted',            
         ]);
+        
         return response()->json([]);
     }
 }

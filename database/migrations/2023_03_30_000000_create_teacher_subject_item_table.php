@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('assigned_teacher', function (Blueprint $table) {
+        Schema::create('teacher_subject_item', function (Blueprint $table) {
             $table->id();                        
             $table->integer('sy_id');
-            $table->integer('teacher_id');
-            $table->integer('total_subjects');
-            $table->string('status');
+            $table->integer('teacher_subject_id');
+            $table->integer('subject_id');            
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assigned_teacher');
+        Schema::dropIfExists('teacher_subject_item');
     }
 };

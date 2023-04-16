@@ -15,6 +15,7 @@ class Subject extends Model
         'code',
         'name',
         'unit',
+        'type',
         'status',
         'created_by',
         'updated_by',

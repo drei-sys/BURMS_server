@@ -25,7 +25,7 @@ class SchoolYearSectionController extends Controller
         $courses = Course::all();
         $subjects = Subject::all();
         $sections = Section::all();
-        $schoolYearSections = SchoolYearSection::whereNot('status', 'deleted')
+        $schoolYearSections = SchoolYearSection::whereNot('status', 'Deleted')
         ->where('sy_id', $syId)->get();
         
         return response()->json([
@@ -40,9 +40,9 @@ class SchoolYearSectionController extends Controller
     public function getFormData(Request $request, $syId): JsonResponse
     {            
         $schoolYear = SchoolYear::find($syId);
-        $courses = Course::whereNot('status', 'deleted')->orderBy('name')->get();
-        $subjects = Subject::whereNot('status', 'deleted')->orderBy('name')->get();
-        $sections = Section::whereNot('status', 'deleted')->orderBy('name')->get();
+        $courses = Course::whereNot('status', 'Deleted')->orderBy('name')->get();
+        $subjects = Subject::whereNot('status', 'Deleted')->orderBy('name')->get();
+        $sections = Section::whereNot('status', 'Deleted')->orderBy('name')->get();
         return response()->json([
             'schoolYear' => $schoolYear,
             'courses' => $courses,
@@ -57,12 +57,11 @@ class SchoolYearSectionController extends Controller
         $schoolYear = SchoolYearSection::where('sy_id', $request->syId)
         // ->where('course_id', $request->courseId)
         ->where('section_id', $request->sectionId)
-        ->first()
-        ;
+        ->first();
 
         if($schoolYear){
             throw ValidationException::withMessages([
-                'section' => "Section already exist",
+                'sectionId' => "Section already exist",
             ]);
         }else{
             SchoolYearSection::create([
@@ -86,7 +85,7 @@ class SchoolYearSectionController extends Controller
     {            
         SchoolYearSection::where('sy_id', $syId)
         ->where('section_id', $sectionId)
-        ->update(['status'=> 'deleted',]);
+        ->update(['status'=> 'Deleted',]);
         return response()->json([]);
     }
 }
