@@ -42,7 +42,7 @@ Route::middleware(['auth'])->post('/subject', [SubjectController::class, 'store'
 Route::middleware(['auth'])->put('/subject/{id}', [SubjectController::class, 'update']);
 Route::middleware(['auth'])->delete('/subject/{id}', [SubjectController::class, 'destroy']);
 
-Route::middleware(['auth'])->get('/courses', [CourseController::class, 'get']);
+Route::get('/courses', [CourseController::class, 'get']);
 Route::middleware(['auth'])->get('/course/{id}', [CourseController::class, 'getOne']);
 Route::middleware(['auth'])->post('/course', [CourseController::class, 'store']);
 Route::middleware(['auth'])->put('/course/{id}', [CourseController::class, 'update']);

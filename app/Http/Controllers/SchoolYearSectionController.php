@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 
+use App\Models\Student;
 use App\Models\Course;
 use App\Models\Section;
 use App\Models\Subject;
@@ -28,12 +29,18 @@ class SchoolYearSectionController extends Controller
         $schoolYearSections = SchoolYearSection::whereNot('status', 'Deleted')
         ->where('sy_id', $syId)->get();
         
+        $student = Student::select('student.*', 'course.name as course_name')
+        ->join('course', 'student.course_id', '=', 'course.id')
+        ->where('student.id', auth()->user()->id)
+        ->first();
+
         return response()->json([
             'schoolYear' => $schoolYear,
             'courses' => $courses,
             'subjects' => $subjects,
             'sections' => $sections,
             'schoolYearSections' => $schoolYearSections,            
+            'student' => $student 
         ]);
     }
 

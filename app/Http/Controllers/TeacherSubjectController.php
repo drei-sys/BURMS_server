@@ -6,6 +6,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\TeacherSubject;
 use App\Models\TeacherSubjectItem;
 use App\Models\SchoolYear;
+use App\Models\SchoolYearSection;
 use App\Models\Subject;
 use App\Models\Teacher;
 
@@ -32,12 +33,15 @@ class TeacherSubjectController extends Controller
         ->orderBy('name')        
         ->get();
 
-        $subjects = Subject::whereNot('status', 'Deleted')->orderBy('name')->get();        
+        $subjects = Subject::all();
+
+        $schoolYearSections = SchoolYearSection::all();
 
         return response()->json([
             'schoolYears' => $schoolYears,
             'teachers' => $teachers,
             'subjects' => $subjects,
+            'schoolYearSections' => $schoolYearSections,
         ]);
     }
 

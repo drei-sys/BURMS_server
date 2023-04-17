@@ -41,7 +41,7 @@ class EnrollmentController extends Controller
     {       
         $enrollment = Enrollment::find($enrollmentId);
         $enrollmentItems = EnrollmentItem::where('enrollment_id', $enrollmentId)
-            ->select('enrollment_item.*', 'sy.year', 'sy.semester', 'course.name as course_name', 'section.name as section_name', 'subject.name as subject_name', 'subject.code as subject_code')
+            ->select('enrollment_item.*', 'sy.year', 'sy.semester', 'course.name as course_name', 'section.name as section_name', 'subject.name as subject_name', 'subject.code as subject_code', 'subject.unit as subject_unit')
             ->join('sy', 'enrollment_item.sy_id', '=', 'sy.id')
             ->join('course', 'enrollment_item.course_id', '=', 'course.id')
             ->join('section', 'enrollment_item.section_id', '=', 'section.id')
