@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('middlename')->nullable();
             $table->string('extname')->nullable();
             $table->string('birth_date');
+            $table->string('birth_place');
             $table->string('gender');
             $table->string('address');
             $table->string('civil_status');
@@ -43,7 +44,7 @@ return new class extends Migration
             $table->string('sh_school_strand');
             $table->string('email');
             $table->integer('course_id');
-            $table->tinyInteger('user_type');
+            $table->string('user_type');
             $table->string('hash');
             $table->string('block_hash')->nullable();
             $table->string('status');

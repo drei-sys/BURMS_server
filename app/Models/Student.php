@@ -18,6 +18,7 @@ class Student extends Model
         'middlename',
         'extname',
         'birth_date',
+        'birth_place',
         'gender',
         'address',
         'civil_status',

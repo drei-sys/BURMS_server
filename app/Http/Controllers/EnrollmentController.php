@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\JsonResponse;
 
 use App\Models\Subject;
+use App\Models\Student;
 use App\Models\SchoolYearSection;
 use App\Models\Enrollment;
 use App\Models\EnrollmentItem;
@@ -21,7 +22,7 @@ class EnrollmentController extends Controller
     //
     public function get(Request $request): JsonResponse
     {            
-        $enrollments = Enrollment::select('enrollment.*', 'student.name as student_name', 'sy.year', 'sy.semester')
+        $enrollments = Enrollment::select('enrollment.*', 'student.lastname', 'student.firstname', 'student.middlename', 'student.extname', 'sy.year', 'sy.semester')
             ->join('sy', 'enrollment.sy_id', '=', 'sy.id')
             ->join('student', 'enrollment.student_id', '=', 'student.id')
             ->orderBy('sy_id', 'desc')->get();
@@ -39,7 +40,9 @@ class EnrollmentController extends Controller
 
     public function getEnrollmentItems(Request $request, $enrollmentId): JsonResponse
     {       
+
         $enrollment = Enrollment::find($enrollmentId);
+        $student = Student::find($enrollment->student_id);
         $enrollmentItems = EnrollmentItem::where('enrollment_id', $enrollmentId)
             ->select('enrollment_item.*', 'sy.year', 'sy.semester', 'course.name as course_name', 'section.name as section_name', 'subject.name as subject_name', 'subject.code as subject_code', 'subject.unit as subject_unit')
             ->join('sy', 'enrollment_item.sy_id', '=', 'sy.id')
@@ -48,8 +51,9 @@ class EnrollmentController extends Controller
             ->join('subject', 'enrollment_item.subject_id', '=', 'subject.id')
             ->get();
         return response()->json([
-            'enrollment' => $enrollment,
-            'enrollmentItems' => $enrollmentItems
+            'enrollment' => $enrollment,            
+            'enrollmentItems' => $enrollmentItems,
+            'student' => $student
         ]);
     }
 
@@ -58,7 +62,7 @@ class EnrollmentController extends Controller
         //check if student is already enrolled
         $enrollmentExist = Enrollment::where('sy_id', $request->sy_id)
             ->where('student_id', auth()->user()->id)
-            ->whereNot('status', 'rejected')->first();
+            ->whereNot('status', 'Rejected')->first();
 
         if($enrollmentExist){
             return throw ValidationException::withMessages([
@@ -143,7 +147,7 @@ class EnrollmentController extends Controller
     public function approve(Request $request, $id): JsonResponse
     {            
         Enrollment::where('id', $id)->update([
-            'status'=> 'approved',            
+            'status'=> 'Enrolled',            
         ]);
         return response()->json([]);
     }
@@ -173,7 +177,7 @@ class EnrollmentController extends Controller
         }
         
         Enrollment::where('id', $id)->update([
-            'status'=> 'rejected',            
+            'status'=> 'Rejected',            
         ]);
         return response()->json($enrollmentItems);
     }

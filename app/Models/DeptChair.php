@@ -16,6 +16,7 @@ class DeptChair extends Model
         'lastname',
         'firstname',
         'middlename',
+        'extname',
         'birth_date',
         'birth_place',
         'gender',

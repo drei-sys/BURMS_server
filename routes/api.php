@@ -33,6 +33,7 @@ Route::middleware(['auth'])->get('/userDetails', [UserController::class, 'getUse
 Route::middleware(['auth'])->get('/profileEditApprovals', [UserController::class, 'getProfileEditApprovals']);
 Route::middleware(['auth'])->get('/blockChainUsers', [UserController::class, 'getBlockchainUsers']);
 Route::middleware(['auth'])->put('/verifyUser/{id}', [UserController::class, 'verify']);
+Route::middleware(['auth'])->put('/rejectUser/{id}', [UserController::class, 'reject']);
 Route::middleware(['auth'])->put('/userDetailsStatus/{id}/{userType}', [UserController::class, 'updateUserDetailsStatus']);
 Route::middleware(['auth'])->put('/userDetails/{id}', [UserController::class, 'updateUserDetails']);
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('lastname');
             $table->string('firstname');
             $table->string('middlename')->nullable();
+            $table->string('extname')->nullable();
             $table->string('birth_date');
             $table->string('birth_place');
             $table->string('gender');
@@ -48,7 +49,7 @@ return new class extends Migration
             $table->string('graduate_studies_remarks')->nullable();
             $table->text('work_experiences')->nullable();
             $table->string('email');
-            $table->tinyInteger('user_type');
+            $table->string('user_type');
             $table->string('hash');
             $table->string('block_hash')->nullable();
             $table->string('status');            

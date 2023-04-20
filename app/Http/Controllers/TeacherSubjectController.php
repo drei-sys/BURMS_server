@@ -19,47 +19,22 @@ use Carbon\Carbon;
 class TeacherSubjectController extends Controller
 {
 
-    public function getFormData(Request $request): JsonResponse
-    {            
-        $schoolYears = SchoolYear::whereNot('status', 'Deleted')
-        ->orderBy('year', 'desc')
-        ->orderBy('semester', 'desc')
-        ->get();
-
-        $teachers = Teacher::select('teacher.*', 'users.is_verified')
-        ->join('users', 'teacher.id', '=', 'users.id')
-        ->where('is_verified', 1)
-        ->whereNot('status', 'Deleted')
-        ->orderBy('name')        
-        ->get();
-
-        $subjects = Subject::all();
-
-        $schoolYearSections = SchoolYearSection::all();
-
-        return response()->json([
-            'schoolYears' => $schoolYears,
-            'teachers' => $teachers,
-            'subjects' => $subjects,
-            'schoolYearSections' => $schoolYearSections,
-        ]);
-    }
-
     //
     public function get(Request $request, $syId): JsonResponse
     {            
-        $teacherSubjects = TeacherSubject::select('teacher_subject.*', 'teacher.name as teacher_name')
+        $teacherSubjects = TeacherSubject::select('teacher_subject.*', 'teacher.lastname', 'teacher.firstname', 'teacher.middlename', 'teacher.extname')
             ->join('teacher', 'teacher_subject.teacher_id', '=', 'teacher.id')
             ->where('sy_id', $syId)                       
             ->whereNot('teacher_subject.status', 'Deleted')
-            ->orderBy('teacher_name')
+            ->orderBy('lastname')
             ->get();
         return response()->json($teacherSubjects);
     }
 
+    
     public function getOne(Request $request, $id): JsonResponse
     {  
-        $teacherSubject = TeacherSubject::select('teacher_subject.*', 'teacher.name as teacher_name', 'sy.year', 'sy.semester', 'sy.status as sy_status')
+        $teacherSubject = TeacherSubject::select('teacher_subject.*', 'teacher.lastname', 'teacher.firstname', 'teacher.middlename', 'teacher.extname', 'sy.year', 'sy.semester', 'sy.status as sy_status')
         ->join('sy', 'teacher_subject.sy_id', '=', 'sy.id')
         ->join('teacher', 'teacher_subject.teacher_id', '=', 'teacher.id')
         ->where('teacher_subject.id', $id)
@@ -75,6 +50,34 @@ class TeacherSubjectController extends Controller
             'teacherSubjectItems' => $teacherSubjectItems
         ]);
     }
+
+    public function getFormData(Request $request): JsonResponse
+    {            
+        $schoolYears = SchoolYear::whereNot('status', 'Deleted')
+        ->orderBy('year', 'desc')
+        ->orderBy('semester', 'desc')
+        ->get();
+
+        $teachers = Teacher::select('teacher.*', 'users.status')
+        ->join('users', 'teacher.id', '=', 'users.id')
+        ->where('users.status', 'Verified')
+        //->whereNot('status', 'Deleted')
+        ->orderBy('lastname')        
+        ->get();
+
+        $subjects = Subject::all();
+
+        $schoolYearSections = SchoolYearSection::all();
+
+        return response()->json([
+            'schoolYears' => $schoolYears,
+            'teachers' => $teachers,
+            'subjects' => $subjects,
+            'schoolYearSections' => $schoolYearSections,
+        ]);
+    }
+
+
 
     public function store(Request $request): JsonResponse
     {     

@@ -34,15 +34,18 @@ class RegisteredUserController extends Controller
         ]);
 
         $user = User::create([
-            'user_type' => $request->user_type,
-            'is_verified' => 0,
-            'name' => $request->firstname,
+            'lastname' => $request->lastname,
+            'firstname' => $request->firstname,
+            'middlename' => $request->middlename,
+            'extname' => $request->extname,
             'email' => $request->email,
+            'user_type' => $request->user_type,
+            'status' => 'For Verification',
             'password' => Hash::make($request->password),
         ]);
 
 
-        if($request->user_type === 3){
+        if($request->user_type === "Student"){
             Student::create([
                 'id' => $user->id,                
                 'lastname' => $request->lastname,
@@ -50,6 +53,7 @@ class RegisteredUserController extends Controller
                 'middlename' => $request->middlename,
                 'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
+                'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
                 'address' => $request->address,
                 'civil_status' => $request->civil_status,
@@ -75,16 +79,17 @@ class RegisteredUserController extends Controller
                 'course_id' => $request->course_id,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,            
             ]);
-        }else if($request->user_type === 4){
+        }else if($request->user_type === "Teacher"){
             Teacher::create([
                 'id' => $user->id,               
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
+                'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
@@ -117,16 +122,17 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
             ]);
-        }else if($request->user_type === 5){
+        }else if($request->user_type === "Non Teaching"){
             NonTeaching::create([
                 'id' => $user->id,               
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
+                'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
@@ -159,16 +165,17 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
             ]);
-        }else if($request->user_type === 6){
+        }else if($request->user_type === "Registrar"){
             Registrar::create([
                 'id' => $user->id,               
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
+                'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
@@ -201,16 +208,17 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
             ]);
-        }else if($request->user_type === 7){
+        }else if($request->user_type === "Dean"){
             Dean::create([
                 'id' => $user->id,               
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
+                'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
@@ -243,16 +251,17 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
             ]);
-        }else if($request->user_type === 8){
+        }else if($request->user_type === "DeptChair"){
             DeptChair::create([
                 'id' => $user->id,               
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
+                'extname' => $request->extname,
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
@@ -285,7 +294,7 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
-                'status' => 'uneditable',                
+                'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
             ]);
