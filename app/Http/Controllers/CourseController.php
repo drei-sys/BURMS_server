@@ -29,8 +29,7 @@ class CourseController extends Controller
 
         $course = Course::create([            
             'name' => $request->name,
-            'status' => $request->status,
-            'email' => $request->email,
+            'status' => $request->status,            
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,            
         ]);

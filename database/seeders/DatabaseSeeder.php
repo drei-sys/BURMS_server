@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Dean;
 use App\Models\DeptChair;
+use App\Models\Course;
 
 
 class DatabaseSeeder extends Seeder
@@ -20,7 +21,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {        
-        User::factory()->create([
+        
+
+        $user = User::factory()->create([
             'lastname' => 'Admin',
             'firstname' => 'Christian Andrei',
             'middlename' => 'Z',
@@ -28,6 +31,13 @@ class DatabaseSeeder extends Seeder
             'user_type' => 'Admin',
             'status' => 'Admin',
         ]); 
+
+        Course::create([            
+            'name' => 'BSIT',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
 
         //student 1
         $student = User::factory()->create([
