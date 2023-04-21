@@ -66,30 +66,37 @@ class EnrollmentController extends Controller
 
         if($enrollmentExist){
             return throw ValidationException::withMessages([
-                'section' => 'You already have a pending enrollment. You can browse it on Enrollments page.',
+                'section' => 'You already have an enrollment. You can browse it on Enrollments page.',
             ]);
         }
 
-        //check each section if its full (schoolYearSections)
-        $fullySlotSections = SchoolYearSection::where('is_slot_full', 1)
+        //check each section's subject if its slot is full (schoolYearSections)
+        $fullySlotItems = SchoolYearSection::where('is_slot_full', 1)
             ->where('sy_id', $request->sy_id)->get();
+            
         $fullySlotSectionIds = [];
-        foreach ($fullySlotSections as $fullySlotSection) {
-            array_push($fullySlotSectionIds, $fullySlotSection["section_id"]);
+        $fullySlotSubjectIds = [];
+
+        foreach ($fullySlotItems as $fullySlotItem) {
+            array_push($fullySlotSectionIds, $fullySlotItem["section_id"]);
+            array_push($fullySlotSubjectIds, $fullySlotItem["subject_id"]);
         }
+        
 
         $enrollmentItems = $request->items;
         $fullySlotSection = "";
+        $fullySlotSubject = "";
         foreach ($enrollmentItems as $enrollmentItem) {
-            if(in_array($enrollmentItem["section_id"], $fullySlotSectionIds)){
+            if(in_array($enrollmentItem["section_id"], $fullySlotSectionIds) && in_array($enrollmentItem["subject_id"], $fullySlotSubjectIds)){
                 $fullySlotSection = $enrollmentItem["section_name"];
+                $fullySlotSubject = $enrollmentItem["subject_name"];
                 break;
             }
         }
 
         if($fullySlotSection !== ""){
             return throw ValidationException::withMessages([
-                'section' => $fullySlotSection . ' section slots was full. Please select different section.',
+                'section' => $fullySlotSection . ' section slots for subject ' . $fullySlotSubject . ' was already full. Please select different section.',
             ]);
         }
 
@@ -121,10 +128,19 @@ class EnrollmentController extends Controller
 
         EnrollmentItem::insert($data);
 
-        //increaase slots count (schoolYearSections)
+        //increase slots count (schoolYearSections)
         foreach ($enrollmentItems as $enrollmentItem) {
-            $schoolYearSection = SchoolYearSection::where('sy_id', $enrollmentItem['sy_id'])
-                ->where('section_id', $enrollmentItem['section_id'])->first();
+
+            $syId = $enrollmentItem['sy_id'];
+            $courseId = $enrollmentItem['course_id'];
+            $sectionId = $enrollmentItem['section_id'];
+            $subjectId = $enrollmentItem['subject_id'];
+
+            $schoolYearSection = SchoolYearSection::where('sy_id', $syId)
+                ->where('course_id', $courseId)
+                ->where('section_id', $sectionId)
+                ->where('subject_id', $subjectId)
+                ->first();
 
             $currentSlotCount = $schoolYearSection->current_slot_count;
             $maxSlotCount = $schoolYearSection->max_slot_count;
@@ -136,8 +152,10 @@ class EnrollmentController extends Controller
                 $isSlotFull = 1;
             }
 
-            SchoolYearSection::where('sy_id', $enrollmentItem['sy_id'])
-                ->where('section_id', $enrollmentItem['section_id'])
+            SchoolYearSection::where('sy_id', $syId)
+                ->where('course_id', $courseId)
+                ->where('section_id', $sectionId)
+                ->where('subject_id', $subjectId)
                 ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
         }
 
@@ -158,8 +176,17 @@ class EnrollmentController extends Controller
         $enrollmentItems = EnrollmentItem::where('enrollment_id', $id)->get();
 
         foreach ($enrollmentItems as $enrollmentItem) {
-            $schoolYearSection = SchoolYearSection::where('sy_id', $enrollmentItem['sy_id'])
-                ->where('section_id', $enrollmentItem['section_id'])->first();
+
+            $syId = $enrollmentItem['sy_id'];
+            $courseId = $enrollmentItem['course_id'];
+            $sectionId = $enrollmentItem['section_id'];
+            $subjectId = $enrollmentItem['subject_id'];
+
+            $schoolYearSection = SchoolYearSection::where('sy_id', $syId)
+                ->where('course_id', $courseId)
+                ->where('section_id', $sectionId)
+                ->where('subject_id', $subjectId)
+                ->first();
 
             $currentSlotCount = $schoolYearSection->current_slot_count;
             $maxSlotCount = $schoolYearSection->max_slot_count;
@@ -171,14 +198,17 @@ class EnrollmentController extends Controller
                 $isSlotFull = 0;
             }
 
-            SchoolYearSection::where('sy_id', $enrollmentItem['sy_id'])
-                ->where('section_id', $enrollmentItem['section_id'])
-                ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
+            SchoolYearSection::where('sy_id', $syId)
+            ->where('course_id', $courseId)
+            ->where('section_id', $sectionId)
+            ->where('subject_id', $subjectId)
+            ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
         }
         
         Enrollment::where('id', $id)->update([
             'status'=> 'Rejected',            
         ]);
+        
         return response()->json($enrollmentItems);
     }
 }

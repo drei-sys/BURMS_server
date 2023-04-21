@@ -64,6 +64,7 @@ class SchoolYearSectionController extends Controller
         $schoolYear = SchoolYearSection::where('sy_id', $request->syId)
         // ->where('course_id', $request->courseId)
         ->where('section_id', $request->sectionId)
+        ->whereNot('status', 'Deleted')
         ->first();
 
         if($schoolYear){
@@ -71,19 +72,28 @@ class SchoolYearSectionController extends Controller
                 'sectionId' => "Section already exist",
             ]);
         }else{
-            SchoolYearSection::create([
-                'sy_id'=> $request->syId,
-                'course_id' => $request->courseId,
-                'section_id' => $request->sectionId,
-                'max_slot_count' => $request->slots,
-                'current_slot_count' => 0,
-                'is_slot_full' => 0,
-                'subjects' => $request->subjectIds,
-                'status' => $request->status,
-                'email' => $request->email,
-                'created_by' => auth()->user()->id,
-                'updated_by' => auth()->user()->id,
-            ]);
+            $subjectIds = $request->subjectIds;
+
+            $data = [];
+            foreach ($subjectIds as $subjectId) {
+                array_push($data, [
+                    'sy_id'=> $request->syId,
+                    'course_id' => $request->courseId,
+                    'section_id' => $request->sectionId,
+                    'subject_id' => $subjectId,
+                    'max_slot_count' => $request->slots,
+                    'current_slot_count' => 0,
+                    'is_slot_full' => 0,
+                    'status' => $request->status,                    
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+
+            SchoolYearSection::insert($data);
+            
             return response()->json([]);
         }
     }
@@ -92,7 +102,8 @@ class SchoolYearSectionController extends Controller
     {            
         SchoolYearSection::where('sy_id', $syId)
         ->where('section_id', $sectionId)
-        ->update(['status'=> 'Deleted',]);
+        //->update(['status'=> 'Deleted']);
+        ->delete();
         return response()->json([]);
     }
 }

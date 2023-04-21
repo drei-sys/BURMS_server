@@ -18,10 +18,10 @@ return new class extends Migration
             $table->integer('sy_id');
             $table->integer('course_id');
             $table->integer('section_id');
+            $table->integer('subject_id');
             $table->integer('max_slot_count');
             $table->integer('current_slot_count');
             $table->integer('is_slot_full');
-            $table->string('subjects');
             $table->string('status');
             $table->integer('created_by');
             $table->integer('updated_by');

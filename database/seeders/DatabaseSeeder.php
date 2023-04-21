@@ -9,6 +9,7 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\Dean;
 use App\Models\DeptChair;
+use App\Models\NonTeaching;
 use App\Models\Course;
 
 
@@ -146,6 +147,24 @@ class DatabaseSeeder extends Seeder
             'user_type' => $deptchair->user_type,                        
             'created_by' => $deptchair->id,
             'updated_by' => $deptchair->id,
+        ]);
+
+        //----------------------------------------------------------
+        //deptchair 1
+        $nonTeaching = User::factory()->create([
+            'user_type' => 'Non Teaching',
+            'status' => 'For Verification',
+        ]);
+        NonTeaching::factory()->create([           
+            'id' => $nonTeaching->id,
+            'lastname' => $nonTeaching->lastname,
+            'firstname' => $nonTeaching->firstname,
+            'middlename' => $nonTeaching->middlename,
+            'extname' => $nonTeaching->extname,
+            'email' => $nonTeaching->email,            
+            'user_type' => $nonTeaching->user_type,                        
+            'created_by' => $nonTeaching->id,
+            'updated_by' => $nonTeaching->id,
         ]);
     }
 
