@@ -77,8 +77,6 @@ class TeacherSubjectController extends Controller
         ]);
     }
 
-
-
     public function store(Request $request): JsonResponse
     {     
         //check if sy is already published

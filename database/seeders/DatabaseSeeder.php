@@ -11,6 +11,8 @@ use App\Models\Dean;
 use App\Models\DeptChair;
 use App\Models\NonTeaching;
 use App\Models\Course;
+use App\Models\Subject;
+use App\Models\Section;
 
 
 class DatabaseSeeder extends Seeder
@@ -39,11 +41,80 @@ class DatabaseSeeder extends Seeder
             'created_by' => $user->id,
             'updated_by' => $user->id,            
         ]);
+        Course::create([            
+            'name' => 'BSCpE',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Subject::create([            
+            'code' => 'FIL1',
+            'name' => 'Filipino 1',
+            'unit' => 3,
+            'type' => 'Minor',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Subject::create([            
+            'code' => 'ENG1',
+            'name' => 'English 1',
+            'unit' => 3,
+            'type' => 'Minor',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Subject::create([            
+            'code' => 'CS101',
+            'name' => 'Computer Programming 1',
+            'unit' => 4,
+            'type' => 'Major',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Subject::create([            
+            'code' => 'CpE101',
+            'name' => 'CpE Major Subject',
+            'unit' => 4,
+            'type' => 'Major',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Subject::create([            
+            'code' => 'ENG2',
+            'name' => 'English 2',
+            'unit' => 3,
+            'type' => 'Minor',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Section::create([            
+            'name' => '1IT-1',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Section::create([            
+            'name' => '1IT-2',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
+        Section::create([            
+            'name' => '1CpE-1',
+            'status' => 'Active',            
+            'created_by' => $user->id,
+            'updated_by' => $user->id,            
+        ]);
 
         //student 1
         $student = User::factory()->create([
             'user_type' => 'Student',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -61,7 +132,7 @@ class DatabaseSeeder extends Seeder
         $student = User::factory()->create([
             'extname' => 'JR.',
             'user_type' => 'Student',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -75,13 +146,49 @@ class DatabaseSeeder extends Seeder
             'created_by' => $student->id,
             'updated_by' => $student->id,
         ]);
+        //student 3
+        $student = User::factory()->create([
+            'extname' => '',
+            'user_type' => 'Student',
+            'status' => 'Verified',
+        ]);
+        Student::factory()->create([           
+            'id' => $student->id,
+            'lastname' => $student->lastname,
+            'firstname' => $student->firstname,
+            'middlename' => $student->middlename,
+            'extname' => $student->extname,
+            'email' => $student->email,
+            'course_id' => 2,
+            'user_type' => $student->user_type,                        
+            'created_by' => $student->id,
+            'updated_by' => $student->id,
+        ]);
+        //student 4
+        $student = User::factory()->create([
+            'extname' => '',
+            'user_type' => 'Student',
+            'status' => 'Verified',
+        ]);
+        Student::factory()->create([           
+            'id' => $student->id,
+            'lastname' => $student->lastname,
+            'firstname' => $student->firstname,
+            'middlename' => $student->middlename,
+            'extname' => $student->extname,
+            'email' => $student->email,
+            'course_id' => 2,
+            'user_type' => $student->user_type,                        
+            'created_by' => $student->id,
+            'updated_by' => $student->id,
+        ]);
 
         //--------------------------------------------------------
 
         //teacher 1
         $teacher = User::factory()->create([
             'user_type' => 'Teacher',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         Teacher::factory()->create([
             'id' => $teacher->id,
@@ -97,7 +204,7 @@ class DatabaseSeeder extends Seeder
         //teacher 2
         $teacher = User::factory()->create([
             'user_type' => 'Teacher',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         Teacher::factory()->create([           
             'id' => $teacher->id,
@@ -116,7 +223,7 @@ class DatabaseSeeder extends Seeder
         //dean 1
         $dean = User::factory()->create([
             'user_type' => 'Dean',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         Dean::factory()->create([           
             'id' => $dean->id,
@@ -135,7 +242,7 @@ class DatabaseSeeder extends Seeder
         //deptchair 1
         $deptchair = User::factory()->create([
             'user_type' => 'DeptChair',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         DeptChair::factory()->create([           
             'id' => $deptchair->id,
@@ -153,7 +260,7 @@ class DatabaseSeeder extends Seeder
         //deptchair 1
         $nonTeaching = User::factory()->create([
             'user_type' => 'Non Teaching',
-            'status' => 'For Verification',
+            'status' => 'Verified',
         ]);
         NonTeaching::factory()->create([           
             'id' => $nonTeaching->id,

@@ -12,6 +12,8 @@ use App\Http\Controllers\SchoolYearSectionController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\TeacherSubjectController;
 
+use App\Http\Controllers\TeacherController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -81,3 +83,5 @@ Route::middleware(['auth'])->get('/teacherSubjectFormData', [TeacherSubjectContr
 Route::middleware(['auth'])->post('/teacherSubject', [TeacherSubjectController::class, 'store']);
 Route::middleware(['auth'])->put('/teacherSubject/{id}', [TeacherSubjectController::class, 'update']);
 Route::middleware(['auth'])->delete('/teacherSubject/{id}', [TeacherSubjectController::class, 'destroy']);
+
+Route::middleware(['auth'])->get('/teacherStudents/{syId}/{id}', [TeacherController::class, 'getStudents']);
