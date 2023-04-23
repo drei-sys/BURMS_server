@@ -11,8 +11,8 @@ use App\Http\Controllers\SchoolYearController;
 use App\Http\Controllers\SchoolYearSectionController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\TeacherSubjectController;
-
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\GradeController;
 
 
 /*
@@ -85,3 +85,6 @@ Route::middleware(['auth'])->put('/teacherSubject/{id}', [TeacherSubjectControll
 Route::middleware(['auth'])->delete('/teacherSubject/{id}', [TeacherSubjectController::class, 'destroy']);
 
 Route::middleware(['auth'])->get('/teacherStudents/{syId}/{id}', [TeacherController::class, 'getStudents']);
+
+Route::middleware(['auth'])->post('/grade', [GradeController::class, 'store']);
+Route::middleware(['auth'])->put('/grade/{id}', [GradeController::class, 'update']);
