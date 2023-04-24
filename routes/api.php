@@ -13,6 +13,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\TeacherSubjectController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\StudentController;
 
 
 /*
@@ -88,3 +89,5 @@ Route::middleware(['auth'])->get('/teacherStudents/{syId}/{id}', [TeacherControl
 
 Route::middleware(['auth'])->post('/grade', [GradeController::class, 'store']);
 Route::middleware(['auth'])->put('/grade/{id}', [GradeController::class, 'update']);
+
+Route::middleware(['auth'])->get('/studentGrades/{syId}/{id}', [StudentController::class, 'getGrades']);

@@ -32,4 +32,12 @@ class Grade extends Model
         'created_by',
         'updated_by',     
     ];
+
+    protected $casts = [
+        'prelim_grade' => 'float',
+        'midterm_grade' => 'float',
+        'final_grade' => 'float',
+        'grade' => 'float',
+        'equivalent' => 'float',
+    ];
 }

@@ -24,6 +24,10 @@ class TeacherController extends Controller
             ->first();
 
         $teacherSubjectItems = [];
+        $enrollmentItems = [];
+        $courses = [];
+        $grades = [];
+
         if($teacherSubject){
 
             $teacherSubjectItems = TeacherSubjectItem::select('teacher_subject_item.*', 'subject.code', 'subject.name')
@@ -45,17 +49,19 @@ class TeacherController extends Controller
                     'subject.code as subject_code', 'subject.name as subject_name',
                     'section.name as section_name',                    
                 )
-                ->join('enrollment', 'enrollment_item.enrollment_id', '=', 'enrollment.id')                
+                ->join('enrollment', 'enrollment_item.enrollment_id', '=', 'enrollment.id')
                 ->join('student', 'enrollment_item.student_id', '=', 'student.id')
-                ->join('course', 'enrollment_item.course_id', '=', 'course.id')                
-                ->join('subject', 'enrollment_item.subject_id', '=', 'subject.id')                
+                ->join('course', 'enrollment_item.course_id', '=', 'course.id')
+                ->join('subject', 'enrollment_item.subject_id', '=', 'subject.id')
                 ->join('section', 'enrollment_item.section_id', '=', 'section.id')
                 ->where('enrollment.status', 'Enrolled')
                 ->whereIn('enrollment_item.subject_id', $subjectIds)
                 ->orderBy('student.lastname')
                 ->get();
 
-            $grades = Grade::where('sy_id', $syId)->get();
+            $grades = Grade::select('grade.*', 'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname')
+            ->join('teacher', 'grade.teacher_id', '=', 'teacher.id')
+            ->where('sy_id', $syId)->get();
 
         }
 
