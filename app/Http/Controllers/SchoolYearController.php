@@ -12,9 +12,9 @@ class SchoolYearController extends Controller
     public function get(Request $request): JsonResponse
     {            
         $schoolYears = SchoolYear::whereNot('status', 'Deleted')
-                        ->orderBy('year', 'desc')
-                        ->orderBy('semester', 'desc')
-                        ->get();
+            ->orderBy('year', 'desc')
+            ->orderBy('semester', 'desc')
+            ->get();
         return response()->json($schoolYears);
     }
 
@@ -27,9 +27,9 @@ class SchoolYearController extends Controller
     public function getOnePublished(Request $request): JsonResponse
     {            
         $schoolYear = SchoolYear::where('status', 'Published')
-        ->orderBy('year', 'desc')
-        ->orderBy('semester', 'desc')
-        ->first();
+            ->orderBy('year', 'desc')
+            ->orderBy('semester', 'desc')
+            ->first();
 
         return response()->json($schoolYear);
     }

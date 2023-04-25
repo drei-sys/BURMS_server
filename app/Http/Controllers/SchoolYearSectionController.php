@@ -26,8 +26,14 @@ class SchoolYearSectionController extends Controller
         $courses = Course::all();
         $subjects = Subject::all();
         $sections = Section::all();
-        $schoolYearSections = SchoolYearSection::whereNot('status', 'Deleted')
-        ->where('sy_id', $syId)->get();
+        $schoolYearSections = SchoolYearSection::select('sy_section.*' , 'course.name as cname', 'section.name as sname')
+        ->join('course', 'sy_section.course_id', '=', 'course.id')
+        ->join('section', 'sy_section.section_id', '=', 'section.id')
+        ->whereNot('sy_section.status', 'Deleted')
+        ->where('sy_id', $syId)
+        ->orderBy('course.name')
+        ->orderBy('section.name')
+        ->get();
         
         $student = Student::select('student.*', 'course.name as course_name')
         ->join('course', 'student.course_id', '=', 'course.id')

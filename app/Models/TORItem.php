@@ -5,17 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TORRequest extends Model
+class TORItem extends Model
 {
     use HasFactory;
 
-    protected $table = 'tor_request';
+    protected $table = 'tor_item';
 
     protected $fillable = [
-        'student_id',
-        'reason',
-        'remarks',
-        'status',
+        'tor_request_id',
+        'sy_id',
+        'subject_id',
+        'rating',
         'created_by',
         'updated_by',
     ];

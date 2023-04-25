@@ -56,6 +56,7 @@ class TeacherController extends Controller
                 ->join('section', 'enrollment_item.section_id', '=', 'section.id')
                 ->where('enrollment.status', 'Enrolled')
                 ->whereIn('enrollment_item.subject_id', $subjectIds)
+                ->where('enrollment_item.sy_id', $syId)
                 ->orderBy('student.lastname')
                 ->get();
 

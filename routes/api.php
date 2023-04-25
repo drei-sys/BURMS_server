@@ -15,6 +15,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TORRequestController;
+use App\Http\Controllers\TORItemController;
 
 
 /*
@@ -94,7 +95,12 @@ Route::middleware(['auth'])->put('/grade/{id}', [GradeController::class, 'update
 Route::middleware(['auth'])->get('/studentGrades/{syId}/{id}', [StudentController::class, 'getGrades']);
 
 Route::middleware(['auth'])->get('/torRequests', [TORRequestController::class, 'get']);
+Route::middleware(['auth'])->get('/studentTORRequests/{studentId}', [TORRequestController::class, 'getStudentTORRequest']);
+Route::middleware(['auth'])->get('/registrarStudentGrades/{id}/{studentId}', [TORRequestController::class, 'getGrades']);
 Route::middleware(['auth'])->get('/torRequest/{id}', [TORRequestController::class, 'getOne']);
 Route::middleware(['auth'])->post('/torRequest', [TORRequestController::class, 'store']);
 Route::middleware(['auth'])->put('/torRequest/{id}', [TORRequestController::class, 'update']);
+Route::middleware(['auth'])->put('/rejectTORRequest/{id}', [TORRequestController::class, 'reject']);
 Route::middleware(['auth'])->delete('/torRequest/{id}', [TORRequestController::class, 'destroy']);
+
+Route::middleware(['auth'])->post('/torItem', [TORItemController::class, 'store']);

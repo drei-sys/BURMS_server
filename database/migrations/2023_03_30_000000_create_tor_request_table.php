@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();            
             $table->integer('student_id');
             $table->string('reason');
+            $table->string('remarks');            
             $table->string('status');            
             $table->integer('created_by');
             $table->integer('updated_by');            

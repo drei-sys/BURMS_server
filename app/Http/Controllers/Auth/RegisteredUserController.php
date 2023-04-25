@@ -77,6 +77,7 @@ class RegisteredUserController extends Controller
                 'sh_school_strand' => $request->sh_school_strand,
                 'email' => $request->email,
                 'course_id' => $request->course_id,
+                'year_level' => $request->year_level,
                 'user_type' => $request->user_type,
                 'hash' => Hash::make(Carbon::now()),
                 'status' => 'Uneditable',                

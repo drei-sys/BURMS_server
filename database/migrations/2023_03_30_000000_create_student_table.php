@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('sh_school_strand');
             $table->string('email');
             $table->integer('course_id');
+            $table->string('year_level');
             $table->string('user_type');
             $table->string('hash');
             $table->string('block_hash')->nullable();

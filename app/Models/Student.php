@@ -42,6 +42,7 @@ class Student extends Model
         'sh_school_strand',
         'email',
         'course_id',
+        'year_level',
         'user_type',
         'status',
         'hash',

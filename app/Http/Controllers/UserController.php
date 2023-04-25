@@ -192,7 +192,8 @@ class UserController extends Controller
                 'school_address' => $request->school_address,
                 'award_received' => $request->award_received,
                 'sh_school_strand' => $request->sh_school_strand,  
-                'course_id' => $request->course_id,            
+                'course_id' => $request->course_id,
+                'year_level' => $request->year_level,
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);
