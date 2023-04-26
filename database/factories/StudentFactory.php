@@ -51,6 +51,7 @@ class StudentFactory extends Factory
             'sh_school_strand' => 'N/A',
             'email' => fake()->unique()->safeEmail(),
             'course_id' => 0,
+            'year_level' => '1st',
             'user_type' => 'Student',
             'hash' => Hash::make(Carbon::now()),
             'status' => 'Uneditable',
