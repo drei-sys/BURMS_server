@@ -112,10 +112,10 @@ class UserController extends Controller
     }
 
     public function updateUserDetails(Request $request, $id): Response
-    {              
-        $userType = auth()->user()->user_type;                  
-        if($userType === "Student"){
-            Student::where('id', $id)->update([  
+    {             
+        $user = User::find($id);
+        if($user->user_type === "Student"){
+            Student::find($id)->update([  
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -148,8 +148,8 @@ class UserController extends Controller
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);            
-        }else if($userType === "Teacher") {
-            Teacher::where('id', $id)->update([  
+        }else if($user->user_type === "Teacher") {
+            Teacher::find($id)->update([  
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -186,8 +186,8 @@ class UserController extends Controller
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);            
-        }else if($userType === "Non Teaching") {
-            NonTeaching::where('id', $id)->update([  
+        }else if($user->user_type === "Non Teaching") {
+            NonTeaching::find($id)->update([  
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -224,8 +224,8 @@ class UserController extends Controller
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);            
-        }else if($userType === "Registrar") {
-            Registrar::where('id', $id)->update([  
+        }else if($user->user_type === "Registrar") {
+            Registrar::find($id)->update([  
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -262,8 +262,8 @@ class UserController extends Controller
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);            
-        }else if($userType === "Dean") {
-            Dean::where('id', $id)->update([  
+        }else if($user->user_type === "Dean") {
+            Dean::find($id)->update([  
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -300,8 +300,8 @@ class UserController extends Controller
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
             ]);            
-        }else if($userType === "DeptChair") {
-            DeptChair::where('id', $id)->update([
+        }else if($user->user_type === "DeptChair") {
+            DeptChair::find($id)->update([
                 'lastname' => $request->lastname,
                 'firstname' => $request->firstname,
                 'middlename' => $request->middlename,
@@ -339,6 +339,13 @@ class UserController extends Controller
                 'status'=> 'Uneditable',            
             ]);            
         }
+
+        User::find($id)->update([
+            'lastname' => $request->lastname,
+            'firstname' => $request->firstname,
+            'middlename' => $request->middlename,
+            'extname' => $request->extname
+        ]);
 
         return response()->noContent();
     }
