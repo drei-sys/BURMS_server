@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Teacher;
+use App\Models\Registrar;
 use App\Models\Dean;
 use App\Models\DeptChair;
 use App\Models\NonTeaching;
@@ -114,7 +115,7 @@ class DatabaseSeeder extends Seeder
         //student 1
         $student = User::factory()->create([
             'user_type' => 'Student',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -132,7 +133,7 @@ class DatabaseSeeder extends Seeder
         $student = User::factory()->create([
             'extname' => 'JR.',
             'user_type' => 'Student',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -150,7 +151,7 @@ class DatabaseSeeder extends Seeder
         $student = User::factory()->create([
             'extname' => '',
             'user_type' => 'Student',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -168,7 +169,7 @@ class DatabaseSeeder extends Seeder
         $student = User::factory()->create([
             'extname' => '',
             'user_type' => 'Student',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Student::factory()->create([           
             'id' => $student->id,
@@ -188,7 +189,7 @@ class DatabaseSeeder extends Seeder
         //teacher 1
         $teacher = User::factory()->create([
             'user_type' => 'Teacher',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Teacher::factory()->create([
             'id' => $teacher->id,
@@ -204,7 +205,7 @@ class DatabaseSeeder extends Seeder
         //teacher 2
         $teacher = User::factory()->create([
             'user_type' => 'Teacher',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Teacher::factory()->create([           
             'id' => $teacher->id,
@@ -223,7 +224,7 @@ class DatabaseSeeder extends Seeder
         //dean 1
         $dean = User::factory()->create([
             'user_type' => 'Dean',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         Dean::factory()->create([           
             'id' => $dean->id,
@@ -242,7 +243,7 @@ class DatabaseSeeder extends Seeder
         //deptchair 1
         $deptchair = User::factory()->create([
             'user_type' => 'DeptChair',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         DeptChair::factory()->create([           
             'id' => $deptchair->id,
@@ -256,11 +257,28 @@ class DatabaseSeeder extends Seeder
             'updated_by' => $deptchair->id,
         ]);
 
+        //registrar 1
+        $registrar = User::factory()->create([
+            'user_type' => 'Registrar',
+            'status' => 'For Verification',
+        ]);
+        Registrar::factory()->create([           
+            'id' => $registrar->id,
+            'lastname' => $registrar->lastname,
+            'firstname' => $registrar->firstname,
+            'middlename' => $registrar->middlename,
+            'extname' => $registrar->extname,
+            'email' => $registrar->email,            
+            'user_type' => $registrar->user_type,                        
+            'created_by' => $registrar->id,
+            'updated_by' => $registrar->id,
+        ]);
+
         //----------------------------------------------------------
-        //deptchair 1
+        //nonteaching 1
         $nonTeaching = User::factory()->create([
             'user_type' => 'Non Teaching',
-            'status' => 'Verified',
+            'status' => 'For Verification',
         ]);
         NonTeaching::factory()->create([           
             'id' => $nonTeaching->id,

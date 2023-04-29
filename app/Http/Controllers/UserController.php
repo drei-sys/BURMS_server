@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -10,6 +9,8 @@ use App\Models\Registrar;
 use App\Models\Dean;
 use App\Models\DeptChair;
 
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -17,12 +18,19 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    //
-    public function get(Request $request): JsonResponse
-    {            
-        $users = User::orderBy('user_type')->orderBy('lastname')->get();
+    //  
+    public function getAll(Request $request): JsonResponse
+    {                                        
+        $students = Student::orderBy('lastname')->get();
+        $teachers = Teacher::orderBy('lastname')->get();
+        $nonTeachings = NonTeaching::orderBy('lastname')->get();
+        $registrars = Registrar::orderBy('lastname')->get();
+        $deans = Dean::orderBy('lastname')->get();
+        $deptChairs = DeptChair::orderBy('lastname')->get();
+        $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
+
         return response()->json($users);
-    }        
+    }     
 
     public function getOne(Request $request, $id): JsonResponse
     {
@@ -56,32 +64,12 @@ class UserController extends Controller
         }        
     }
 
-    public function getUserDetails(Request $request): JsonResponse
-    {       
-        $userType = auth()->user()->user_type;
-        $userId = auth()->user()->id;
-        if($userType === "Student"){
-            $userDetails = Student::find($userId);
-            return response()->json($userDetails);
-        }else if($userType === "Teacher"){
-            $userDetails = Teacher::find($userId);
-            return response()->json($userDetails);
-        }else if($userType === "Non Teaching"){
-            $userDetails = NonTeaching::find($userId);
-            return response()->json($userDetails);
-        }else if($userType === "Registrar"){
-            $userDetails = Registrar::find($userId);
-            return response()->json($userDetails);
-        }else if($userType === "Dean"){
-            $userDetails = Dean::find($userId);
-            return response()->json($userDetails);
-        }else if($userType === "DeptChair"){
-            $userDetails = DeptChair::find($userId);
-            return response()->json($userDetails);
-        }else{
-            return response()->json([]);
-        }
-    }
+    public function getRegisteredUsers(Request $request): JsonResponse
+    {            
+        $users = User::orderBy('user_type')->orderBy('lastname')->get(); 
+
+        return response()->json($users);
+    } 
 
     public function getProfileEditApprovals(Request $request): JsonResponse
     {                                        
@@ -92,75 +80,38 @@ class UserController extends Controller
         $deans = Dean::where('status', 'For Approval')->orderBy('lastname')->get();
         $deptChairs = DeptChair::where('status', 'For Approval')->orderBy('lastname')->get();
         $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
+
         return response()->json($users);
     }
 
-    public function getBlockchainUsers(Request $request): JsonResponse
-    {                                        
-        $students = Student::orderBy('lastname')->get();
-        $teachers = Teacher::orderBy('lastname')->get();
-        $nonTeachings = NonTeaching::orderBy('lastname')->get();
-        $registrars = Registrar::orderBy('lastname')->get();
-        $deans = Dean::orderBy('lastname')->get();
-        $deptChairs = DeptChair::orderBy('lastname')->get();
-        $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
-        return response()->json($users);
-    }
-
-    public function verify(Request $request, $id): JsonResponse
+    public function updateRegisteredUser(Request $request, $id): Response
     {                    
-        User::where('id', $id)->update([
-            'status'=> 'Verified',            
-        ]);
-        return response()->json([]);
+        User::find($id)->update([ 'status'=> $request->status ]);
+
+        return response()->noContent();
     }
 
-    public function reject(Request $request, $id): JsonResponse
-    {                    
-        User::where('id', $id)->update([
-            'status'=> 'Rejected',            
-        ]);
-        return response()->json([]);
-    }
-
-    public function updateUserDetailsStatus(Request $request, $id, $userType): JsonResponse
-    {                            
-        if($userType === 'Student'){
-            Student::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else if($userType === 'Teacher') {
-            Teacher::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else if($userType === 'Non Teaching') {
-            NonTeaching::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else if($userType === 'Registrar') {
-            Registrar::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else if($userType === 'Dean') {
-            Dean::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else if($userType === 'DeptChair') {
-            DeptChair::where('id', $id)->update([
-                'status'=> $request->status,            
-            ]);
-            return response()->json([]);
-        }else{
-            return response()->json($userType);
+    public function updateUserStatus(Request $request, $id): Response
+    {               
+        $user = User::find($id);
+        if($user->user_type === 'Student'){
+            Student::find($id)->update([ 'status'=> $request->status ]);            
+        }else if($user->user_type === 'Teacher') {
+            Teacher::find($id)->update([ 'status'=> $request->status ]);            
+        }else if($user->user_type === 'Non Teaching') {
+            NonTeaching::find($id)->update([ 'status'=> $request->status ]);            
+        }else if($user->user_type === 'Registrar') {
+            Registrar::find($id)->update([ 'status'=> $request->status ]);            
+        }else if($user->user_type === 'Dean') {
+            Dean::find($id)->update([ 'status'=> $request->status ]);            
+        }else if($user->user_type === 'DeptChair') {
+            DeptChair::find($id)->update([ 'status'=> $request->status ]);            
         }
+
+        return response()->noContent();
     }
 
-    public function updateUserDetails(Request $request, $id): JsonResponse
+    public function updateUserDetails(Request $request, $id): Response
     {              
         $userType = auth()->user()->user_type;                  
         if($userType === "Student"){
@@ -196,8 +147,7 @@ class UserController extends Controller
                 'year_level' => $request->year_level,
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
+            ]);            
         }else if($userType === "Teacher") {
             Teacher::where('id', $id)->update([  
                 'lastname' => $request->lastname,
@@ -235,8 +185,7 @@ class UserController extends Controller
                 'work_experiences' => $request->work_experiences,              
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
+            ]);            
         }else if($userType === "Non Teaching") {
             NonTeaching::where('id', $id)->update([  
                 'lastname' => $request->lastname,
@@ -274,8 +223,7 @@ class UserController extends Controller
                 'work_experiences' => $request->work_experiences,              
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
+            ]);            
         }else if($userType === "Registrar") {
             Registrar::where('id', $id)->update([  
                 'lastname' => $request->lastname,
@@ -313,8 +261,7 @@ class UserController extends Controller
                 'work_experiences' => $request->work_experiences,              
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
+            ]);            
         }else if($userType === "Dean") {
             Dean::where('id', $id)->update([  
                 'lastname' => $request->lastname,
@@ -352,8 +299,7 @@ class UserController extends Controller
                 'work_experiences' => $request->work_experiences,              
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
+            ]);            
         }else if($userType === "DeptChair") {
             DeptChair::where('id', $id)->update([
                 'lastname' => $request->lastname,
@@ -391,11 +337,10 @@ class UserController extends Controller
                 'work_experiences' => $request->work_experiences,                
                 'hash'=> Hash::make(Carbon::now()),            
                 'status'=> 'Uneditable',            
-            ]);
-            return response()->json([]);
-        }else{
-            return response()->json([]);
+            ]);            
         }
+
+        return response()->noContent();
     }
 
 }

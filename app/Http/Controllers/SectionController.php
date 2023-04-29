@@ -1,15 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
+
 use App\Models\Section;
+
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SectionController extends Controller
 {
     //
-    public function get(Request $request): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {            
         $sections = Section::whereNot('status', 'Deleted')->orderBy('name')->get();
         return response()->json($sections);
@@ -17,43 +20,42 @@ class SectionController extends Controller
 
     public function getOne(Request $request, $id): JsonResponse
     {            
-        $section = Section::find($id);
+        $section = Section::whereNot('status', 'Deleted')->find($id);
+        
         return response()->json($section);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
         $request->validate([
             'name' => ['required', Rule::unique('section')->where('status' , 'Active')],
         ]);
 
-        $section = Section::create([            
+        Section::create([            
             'name' => $request->name,
             'status' => $request->status,            
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,            
         ]);
 
-        return response()->json($section);
+        return response()->noContent();
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id): Response
     {            
         $request->validate([
             'name' => ['required', Rule::unique('section')->where('status' , 'Active')->ignore($id)],
         ]);
 
-        Section::where('id', $id)->update([            
-            'name' => $request->name,
-        ]);
-        return response()->json([]);
+        Section::find($id)->update([ 'name' => $request->name ]);
+        
+        return response()->noContent();
     }
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(Request $request, $id): Response
     {            
-        Section::where('id', $id)->update([
-            'status'=> 'Deleted',            
-        ]);
-        return response()->json([]);
+        Section::where('id', $id)->update([ 'status'=> 'Deleted' ]);
+        
+        return response()->noContent();
     }
 }

@@ -1,33 +1,38 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
+
 use App\Models\Subject;
+
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 
 class SubjectController extends Controller
 {
     //
-    public function get(Request $request): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {            
         $subjects = Subject::whereNot('status', 'Deleted')->orderBy('name')->get();
+        
         return response()->json($subjects);
     }
 
     public function getOne(Request $request, $id): JsonResponse
     {            
-        $subject = Subject::find($id);
+        $subject = Subject::whereNot('status', 'Deleted')->find($id);
+
         return response()->json($subject);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
         $request->validate([
             'code' => ['required', Rule::unique('subject')->where('status' , 'Active')],
         ]);
 
-        $subject = Subject::create([
+        Subject::create([
             'code'=> $request->code,
             'name' => $request->name,
             'unit' => $request->unit,
@@ -37,31 +42,29 @@ class SubjectController extends Controller
             'updated_by' => auth()->user()->id,            
         ]);
 
-        return response()->json($subject);
+        return response()->noContent();
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id): Response
     {            
         $request->validate([
             'code' => ['required', Rule::unique('subject')->where('status' , 'Active')->ignore($id)],
         ]);
 
-        Subject::where('id', $id)->update([
+        Subject::find($id)->update([
             'code'=> $request->code,
             'name' => $request->name,
             'unit' => $request->unit,
             'type' => $request->type,
         ]);
 
-        return response()->json([]);
+        return response()->noContent();
     }
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(Request $request, $id): Response
     {            
-        Subject::where('id', $id)->update([
-            'status'=> 'Deleted',            
-        ]);
+        Subject::find($id)->update([ 'status'=> 'Deleted' ]);
         
-        return response()->json([]);
+        return response()->noContent();
     }
 }

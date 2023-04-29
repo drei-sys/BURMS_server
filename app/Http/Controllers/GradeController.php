@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
+
 use App\Models\Grade;
+
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -11,21 +14,38 @@ use Carbon\Carbon;
 class GradeController extends Controller
 {
     //
-    public function get(Request $request): JsonResponse
-    {            
-        $grades = Grade::whereNot('status', 'Deleted')->orderBy('name')->get();
+    public function getAllBySyId(Request $request, $syId): JsonResponse
+    {
+        $grades = Grade::select('grade.*', 'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname')
+            ->join('teacher', 'grade.teacher_id', '=', 'teacher.id')
+            ->where('sy_id', $syId)->get();
+
         return response()->json($grades);
     }
 
-    public function getOne(Request $request, $id): JsonResponse
-    {            
-        $grade = Grade::find($id);
-        return response()->json($grade);
+    public function getAllBySyIdStudentId(Request $request, $syId, $studentId): JsonResponse
+    {
+        $grades = Grade::select('grade.*', 'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname')
+            ->join('teacher', 'grade.teacher_id', '=', 'teacher.id')
+            ->where('sy_id', $syId)
+            ->where('student_id', $studentId)
+            ->get();
+
+            return response()->json($grades);
     }
 
-    public function store(Request $request): JsonResponse
+    public function getAllByStudentId(Request $request, $studentId): JsonResponse
     {
-        $grade = Grade::create([            
+        $grades = Grade::select('grade.*', 'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname')
+            ->join('teacher', 'grade.teacher_id', '=', 'teacher.id')
+            ->where('student_id', $studentId)->get();
+
+            return response()->json($grades);
+    }
+
+    public function store(Request $request): Response
+    {
+        Grade::create([            
             'sy_id' => $request->sy_id,
             'course_id' => $request->course_id,
             'section_id' => $request->section_id,
@@ -39,7 +59,7 @@ class GradeController extends Controller
             'midterm_grade' => $request->midterm_grade,
             'final_grade' => $request->final_grade,
             'grade' => $request->grade,
-            'equivalent' => $request->equivalent,
+            'rating' => $request->rating,
             'remarks' => $request->remarks,
             'hash'=> Hash::make(Carbon::now()),
             'status' => $request->status,
@@ -47,13 +67,13 @@ class GradeController extends Controller
             'updated_by' => auth()->user()->id,            
         ]);
 
-        return response()->json($grade);
+        return response()->noContent();
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id): Response
     {            
 
-        Grade::where('id', $id)->update([            
+        Grade::find($id)->update([            
             'sy_id' => $request->sy_id,
             'course_id' => $request->course_id,
             'section_id' => $request->section_id,
@@ -67,13 +87,14 @@ class GradeController extends Controller
             'midterm_grade' => $request->midterm_grade,
             'final_grade' => $request->final_grade,
             'grade' => $request->grade,
-            'equivalent' => $request->equivalent,
+            'rating' => $request->rating,
             'remarks' => $request->remarks,
             'hash'=> Hash::make(Carbon::now()),
             'status' => $request->status,
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,  
         ]);
-        return response()->json([]);
+        
+        return response()->noResponse([]);
     }
 }

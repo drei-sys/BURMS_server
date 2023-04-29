@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
 
 use App\Models\Subject;
 use App\Models\Student;
@@ -9,53 +8,62 @@ use App\Models\SchoolYearSection;
 use App\Models\Enrollment;
 use App\Models\EnrollmentItem;
 
-
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-
 use Illuminate\Validation\ValidationException;
-
 use Carbon\Carbon;
 
 class EnrollmentController extends Controller
 {
     //
-    public function get(Request $request): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {            
         $enrollments = Enrollment::select('enrollment.*', 'student.lastname', 'student.firstname', 'student.middlename', 'student.extname', 'sy.year', 'sy.semester')
             ->join('sy', 'enrollment.sy_id', '=', 'sy.id')
             ->join('student', 'enrollment.student_id', '=', 'student.id')
             ->orderBy('sy_id', 'desc')->get();
+            
         return response()->json($enrollments);
     }
 
-    public function getStudentEnrollment(Request $request, $studentId): JsonResponse
+    public function getAllByStudentId(Request $request, $studentId): JsonResponse
     {            
         $enrollments = Enrollment::where('student_id', $studentId)
             ->select('enrollment.*', 'sy.year', 'sy.semester')
             ->join('sy', 'enrollment.sy_id', '=', 'sy.id')
-            ->orderBy('sy_id', 'desc')->get();
+            ->orderBy('sy_id', 'desc')
+            ->get();
+
         return response()->json($enrollments);
     }
 
-    public function getEnrollmentItems(Request $request, $enrollmentId): JsonResponse
+    public function getOne(Request $request, $id): JsonResponse
     {       
 
-        $enrollment = Enrollment::find($enrollmentId);
-        //$student = Student::find($enrollment->student_id);
+        $enrollment = Enrollment::select('enrollment.*', 'sy.year as sy_year', 'sy.semester as sy_semester')
+            ->join('sy', 'enrollment.sy_id', '=', 'sy.id')
+            ->where('enrollment.id', $id)
+            ->first();
 
-        $student = Student::select('student.*', 'course.name as course_name')
-        ->join('course', 'student.course_id', '=', 'course.id')
-        ->where('student.id', $enrollment->student_id)
-        ->first();
+        $student = null;
+        $enrollmentItems= [];
 
-        $enrollmentItems = EnrollmentItem::where('enrollment_id', $enrollmentId)
-            ->select('enrollment_item.*', 'sy.year', 'sy.semester', 'course.name as course_name', 'section.name as section_name', 'subject.name as subject_name', 'subject.code as subject_code', 'subject.unit as subject_unit')
-            ->join('sy', 'enrollment_item.sy_id', '=', 'sy.id')
-            ->join('course', 'enrollment_item.course_id', '=', 'course.id')
-            ->join('section', 'enrollment_item.section_id', '=', 'section.id')
-            ->join('subject', 'enrollment_item.subject_id', '=', 'subject.id')
-            ->get();
+        if($enrollment){
+            $student = Student::select('student.*', 'course.name as course_name')
+                ->join('course', 'student.course_id', '=', 'course.id')
+                ->where('student.id', $enrollment->student_id)
+                ->first();
+
+            $enrollmentItems = EnrollmentItem::select('enrollment_item.*', 'course.name as course_name', 'section.name as section_name', 'subject.name as subject_name', 'subject.code as subject_code', 'subject.unit as subject_unit')            
+                ->join('course', 'enrollment_item.course_id', '=', 'course.id')
+                ->join('section', 'enrollment_item.section_id', '=', 'section.id')
+                ->join('subject', 'enrollment_item.subject_id', '=', 'subject.id')
+                ->where('enrollment_id', $id)
+                ->get();
+        }
+
         return response()->json([
             'enrollment' => $enrollment,            
             'enrollmentItems' => $enrollmentItems,
@@ -63,7 +71,7 @@ class EnrollmentController extends Controller
         ]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
         //check if student is already enrolled
         $enrollmentExist = Enrollment::where('sy_id', $request->sy_id)
@@ -119,10 +127,8 @@ class EnrollmentController extends Controller
         $data = [];
         foreach ($enrollmentItems as $enrollmentItem) {
             array_push($data, [
-                'enrollment_id' => $enrollment->id,
-                'sy_id' => $enrollmentItem['sy_id'],
-                'course_id' => $enrollmentItem['course_id'],
-                'student_id' => auth()->user()->id,
+                'enrollment_id' => $enrollment->id,                
+                'course_id' => $enrollmentItem['course_id'],                
                 'section_id' => $enrollmentItem['section_id'],
                 'subject_id' => $enrollmentItem['subject_id'],
                 'created_by' => auth()->user()->id,
@@ -137,7 +143,7 @@ class EnrollmentController extends Controller
         //increase slots count (schoolYearSections)
         foreach ($enrollmentItems as $enrollmentItem) {
 
-            $syId = $enrollmentItem['sy_id'];
+            $syId = $enrollment->sy_id;
             $courseId = $enrollmentItem['course_id'];
             $sectionId = $enrollmentItem['section_id'];
             $subjectId = $enrollmentItem['subject_id'];
@@ -165,56 +171,56 @@ class EnrollmentController extends Controller
                 ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
         }
 
-        return response()->json([]);
+        return response()->noContent();
     }
 
-    public function approve(Request $request, $id): JsonResponse
+    public function updateEnrollmentStatus(Request $request, $id): Response
     {            
-        Enrollment::where('id', $id)->update([
-            'status'=> 'Enrolled',            
-        ]);
-        return response()->json([]);
-    }
 
-    public function reject(Request $request, $id): JsonResponse
-    {          
-        //decrease slots
-        $enrollmentItems = EnrollmentItem::where('enrollment_id', $id)->get();
+        if($request->status === "Enrolled"){
 
-        foreach ($enrollmentItems as $enrollmentItem) {
+            Enrollment::find($id)->update([ 'status'=> $request->status ]);
 
-            $syId = $enrollmentItem['sy_id'];
-            $courseId = $enrollmentItem['course_id'];
-            $sectionId = $enrollmentItem['section_id'];
-            $subjectId = $enrollmentItem['subject_id'];
+        }else if($request->status === "Rejected"){
 
-            $schoolYearSection = SchoolYearSection::where('sy_id', $syId)
+            $enrollment = Enrollment::find($id);
+
+            //decrease slots
+            $enrollmentItems = EnrollmentItem::where('enrollment_id', $id)->get();
+
+            foreach ($enrollmentItems as $enrollmentItem) {
+
+                $syId = $enrollment->sy_id;
+                $courseId = $enrollmentItem['course_id'];
+                $sectionId = $enrollmentItem['section_id'];
+                $subjectId = $enrollmentItem['subject_id'];
+
+                $schoolYearSection = SchoolYearSection::where('sy_id', $syId)
+                    ->where('course_id', $courseId)
+                    ->where('section_id', $sectionId)
+                    ->where('subject_id', $subjectId)
+                    ->first();
+
+                $currentSlotCount = $schoolYearSection->current_slot_count;
+                $maxSlotCount = $schoolYearSection->max_slot_count;
+                $isSlotFull = $schoolYearSection->is_slot_full;
+
+                $currentSlotCount -= 1;
+
+                if($currentSlotCount !== $maxSlotCount){
+                    $isSlotFull = 0;
+                }
+
+                SchoolYearSection::where('sy_id', $syId)
                 ->where('course_id', $courseId)
                 ->where('section_id', $sectionId)
                 ->where('subject_id', $subjectId)
-                ->first();
-
-            $currentSlotCount = $schoolYearSection->current_slot_count;
-            $maxSlotCount = $schoolYearSection->max_slot_count;
-            $isSlotFull = $schoolYearSection->is_slot_full;
-
-            $currentSlotCount -= 1;
-
-            if($currentSlotCount !== $maxSlotCount){
-                $isSlotFull = 0;
+                ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
             }
 
-            SchoolYearSection::where('sy_id', $syId)
-            ->where('course_id', $courseId)
-            ->where('section_id', $sectionId)
-            ->where('subject_id', $subjectId)
-            ->update(['current_slot_count' => $currentSlotCount, 'is_slot_full' => $isSlotFull]);
+            Enrollment::find($id)->update([ 'status'=> $request->status ]);
         }
-        
-        Enrollment::where('id', $id)->update([
-            'status'=> 'Rejected',            
-        ]);
-        
-        return response()->json($enrollmentItems);
+
+        return response()->noContent();
     }
 }

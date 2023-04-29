@@ -1,26 +1,31 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\JsonResponse;
+
 use App\Models\SchoolYear;
+
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SchoolYearController extends Controller
 {
     //
-    public function get(Request $request): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {            
         $schoolYears = SchoolYear::whereNot('status', 'Deleted')
             ->orderBy('year', 'desc')
             ->orderBy('semester', 'desc')
             ->get();
+
         return response()->json($schoolYears);
     }
 
     public function getOne(Request $request, $id): JsonResponse
     {            
-        $schoolYear = SchoolYear::find($id);
+        $schoolYear = SchoolYear::whereNot('status', 'Deleted')->find($id);
+
         return response()->json($schoolYear);
     }
 
@@ -34,9 +39,9 @@ class SchoolYearController extends Controller
         return response()->json($schoolYear);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request): Response
     {
-        $schoolYear = SchoolYear::create([
+        SchoolYear::create([
             'year'=> $request->year,
             'semester' => $request->semester,
             'status' => $request->status,
@@ -45,31 +50,30 @@ class SchoolYearController extends Controller
             'updated_by' => auth()->user()->id,
         ]);
 
-        return response()->json($schoolYear);
+        return response()->noContent();
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id): Response
     {            
-        SchoolYear::where('id', $id)->update([
+        SchoolYear::find($id)->update([
             'year'=> $request->year,
             'semester' => $request->semester,
         ]);
-        return response()->json([]);
+
+        return response()->noContent();
     }
 
-    public function updateStatus(Request $request, $id): JsonResponse
+    public function updateSchoolYearStatus(Request $request, $id): Response
     {            
-        SchoolYear::where('id', $id)->update([
-            'status'=> $request->status,            
-        ]);
-        return response()->json([]);
+        SchoolYear::find($id)->update([ 'status'=> $request->status ]);
+
+        return response()->noContent();
     }
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(Request $request, $id): Response
     {            
-        SchoolYear::where('id', $id)->update([
-            'status'=> 'Deleted',            
-        ]);
-        return response()->json([]);
+        SchoolYear::find($id)->update([ 'status'=> 'Deleted' ]);
+
+        return response()->noContent();
     }
 }

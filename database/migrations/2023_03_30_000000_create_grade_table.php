@@ -28,7 +28,7 @@ return new class extends Migration
             $table->decimal('midterm_grade', 8, 2);
             $table->decimal('final_grade', 8, 2);
             $table->decimal('grade', 8, 2);
-            $table->decimal('equivalent', 8, 2);
+            $table->decimal('rating', 8, 2);
             $table->string('remarks');
             $table->string('status');
             $table->string('hash');

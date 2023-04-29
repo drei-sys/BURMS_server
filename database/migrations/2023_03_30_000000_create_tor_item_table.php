@@ -17,8 +17,11 @@ return new class extends Migration
             $table->id();
             $table->integer('tor_request_id');
             $table->integer('sy_id');
-            $table->string('subject_id');
-            $table->string('rating');
+            $table->string('subject_code');
+            $table->string('subject_name');
+            $table->decimal('rating', 8, 2);
+            $table->integer('credits');
+            $table->string('completion_grade');
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();

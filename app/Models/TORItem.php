@@ -14,8 +14,11 @@ class TORItem extends Model
     protected $fillable = [
         'tor_request_id',
         'sy_id',
-        'subject_id',
+        'subject_code',
+        'subject_name',
         'rating',
+        'credits',
+        'completion_grade',
         'created_by',
         'updated_by',
     ];

@@ -25,7 +25,7 @@ class Grade extends Model
         'midterm_grade',
         'final_grade',
         'grade',
-        'equivalent',
+        'rating',
         'remarks',
         'status',
         'hash',
@@ -38,6 +38,6 @@ class Grade extends Model
         'midterm_grade' => 'float',
         'final_grade' => 'float',
         'grade' => 'float',
-        'equivalent' => 'float',
+        'rating' => 'float',
     ];
 }
