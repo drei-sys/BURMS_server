@@ -21,12 +21,43 @@ class UserController extends Controller
     //  
     public function getAll(Request $request): JsonResponse
     {                                        
-        $students = Student::orderBy('lastname')->get();
-        $teachers = Teacher::orderBy('lastname')->get();
-        $nonTeachings = NonTeaching::orderBy('lastname')->get();
-        $registrars = Registrar::orderBy('lastname')->get();
-        $deans = Dean::orderBy('lastname')->get();
-        $deptChairs = DeptChair::orderBy('lastname')->get();
+        $students = Student::select('student.*', 'users.status')
+            ->join('users', 'student.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('student.lastname')
+            ->get();
+
+
+        $teachers = Teacher::select('teacher.*', 'users.status')
+            ->join('users', 'teacher.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('teacher.lastname')
+            ->get();
+
+        $nonTeachings = NonTeaching::select('non_teaching.*', 'users.status')
+            ->join('users', 'non_teaching.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('non_teaching.lastname')
+            ->get();
+
+        $registrars = Registrar::select('registrar.*', 'users.status')
+            ->join('users', 'registrar.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('registrar.lastname')
+            ->get();
+
+        $deans = Dean::select('dean.*', 'users.status')
+            ->join('users', 'dean.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('dean.lastname')
+            ->get();
+
+        $deptChairs = DeptChair::select('dept_chair.*', 'users.status')
+            ->join('users', 'dept_chair.id', '=', 'users.id')
+            ->where('users.status', 'Verified')
+            ->orderBy('dept_chair.lastname')
+            ->get();
+
         $users = [...$students, ...$teachers, ...$nonTeachings, ...$registrars, ...$deans, ...$deptChairs];    
 
         return response()->json($users);
@@ -34,34 +65,38 @@ class UserController extends Controller
 
     public function getOne(Request $request, $id): JsonResponse
     {
-        $user = User::find($id);
-        if($user->user_type === "Student"){
-            $userDetails = Student::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
-        }else if($user->user_type === "Teacher"){
-            $userDetails = Teacher::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
-        }else if($user->user_type === "Non Teaching"){
-            $userDetails = NonTeaching::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
-        }else if($user->user_type === "Registrar"){
-            $userDetails = Registrar::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
-        }else if($user->user_type === "Dean"){
-            $userDetails = Dean::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
-        }else if($user->user_type === "DeptChair"){
-            $userDetails = DeptChair::find($id);
-            $userDetails->user_status = $user->status;
-            return response()->json($userDetails);
+        $user = User::where('status', 'Verified')->find($id);
+        if($user){
+            if($user->user_type === "Student"){
+                $userDetails = Student::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else if($user->user_type === "Teacher"){
+                $userDetails = Teacher::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else if($user->user_type === "Non Teaching"){
+                $userDetails = NonTeaching::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else if($user->user_type === "Registrar"){
+                $userDetails = Registrar::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else if($user->user_type === "Dean"){
+                $userDetails = Dean::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else if($user->user_type === "DeptChair"){
+                $userDetails = DeptChair::find($id);
+                $userDetails->user_status = $user->status;
+                return response()->json($userDetails);
+            }else{
+                return response()->json([]);
+            }   
         }else{
-            return response()->json([]);
-        }        
+            return response()->json("{}");
+        }   
     }
 
     public function getRegisteredUsers(Request $request): JsonResponse
@@ -95,17 +130,37 @@ class UserController extends Controller
     {               
         $user = User::find($id);
         if($user->user_type === 'Student'){
-            Student::find($id)->update([ 'status'=> $request->status ]);            
+            Student::find($id)->update([ 'status' => $request->status ]);            
         }else if($user->user_type === 'Teacher') {
-            Teacher::find($id)->update([ 'status'=> $request->status ]);            
+            Teacher::find($id)->update([ 'status' => $request->status ]);            
         }else if($user->user_type === 'Non Teaching') {
-            NonTeaching::find($id)->update([ 'status'=> $request->status ]);            
+            NonTeaching::find($id)->update([ 'status' => $request->status ]);            
         }else if($user->user_type === 'Registrar') {
-            Registrar::find($id)->update([ 'status'=> $request->status ]);            
+            Registrar::find($id)->update([ 'status' => $request->status ]);            
         }else if($user->user_type === 'Dean') {
-            Dean::find($id)->update([ 'status'=> $request->status ]);            
+            Dean::find($id)->update([ 'status' => $request->status ]);            
         }else if($user->user_type === 'DeptChair') {
-            DeptChair::find($id)->update([ 'status'=> $request->status ]);            
+            DeptChair::find($id)->update([ 'status' => $request->status ]);            
+        }
+
+        return response()->noContent();
+    }
+
+    public function updateUserBlockHash(Request $request, $id): Response
+    {               
+        $user = User::find($id);
+        if($user->user_type === 'Student'){
+            Student::find($id)->update([ 'block_hash' => $request->block_hash ]);            
+        }else if($user->user_type === 'Teacher') {
+            Teacher::find($id)->update([ 'block_hash' => $request->block_hash ]);            
+        }else if($user->user_type === 'Non Teaching') {
+            NonTeaching::find($id)->update([ 'block_hash' => $request->block_hash ]);            
+        }else if($user->user_type === 'Registrar') {
+            Registrar::find($id)->update([ 'block_hash' => $request->block_hash ]);            
+        }else if($user->user_type === 'Dean') {
+            Dean::find($id)->update([ 'block_hash' => $request->block_hash ]);            
+        }else if($user->user_type === 'DeptChair') {
+            DeptChair::find($id)->update([ 'block_hash' => $request->block_hash ]);            
         }
 
         return response()->noContent();

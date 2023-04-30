@@ -95,6 +95,6 @@ class GradeController extends Controller
             'updated_by' => auth()->user()->id,  
         ]);
         
-        return response()->noResponse([]);
+        return response()->noContent();
     }
 }

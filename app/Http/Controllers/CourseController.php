@@ -53,7 +53,7 @@ class CourseController extends Controller
         return response()->noContent();
     }
 
-    public function destroy(Request $request, $id): JsonResponse
+    public function destroy(Request $request, $id): Response
     {            
         Course::find($id)->update([ 'status'=> 'Deleted' ]);
 

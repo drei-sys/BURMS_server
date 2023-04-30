@@ -38,6 +38,7 @@ Route::middleware(['auth'])->get('/registeredUsers', [UserController::class, 'ge
 Route::middleware(['auth'])->get('/profileEditApprovals', [UserController::class, 'getProfileEditApprovals']);
 Route::middleware(['auth'])->put('/registeredUser/{id}', [UserController::class, 'updateRegisteredUser']);
 Route::middleware(['auth'])->put('/userStatus/{id}', [UserController::class, 'updateUserStatus']);
+Route::middleware(['auth'])->put('/userBlockHash/{id}', [UserController::class, 'updateUserBlockHash']);
 Route::middleware(['auth'])->put('/user/{id}', [UserController::class, 'updateUserDetails']);
 
 Route::middleware(['auth'])->get('/subjects', [SubjectController::class, 'getAll']);
@@ -94,6 +95,7 @@ Route::middleware(['auth'])->get('/gradesRPOV/{studentId}', [GradeController::cl
 Route::middleware(['auth'])->post('/grade', [GradeController::class, 'store']);
 Route::middleware(['auth'])->put('/grade/{id}', [GradeController::class, 'update']);
 
+Route::middleware(['auth'])->get('/students', [StudentController::class, 'getAll']);
 Route::middleware(['auth'])->get('/student/{id}', [StudentController::class, 'getOne']);
 
 Route::middleware(['auth'])->get('/torRequests', [TORRequestController::class, 'getAll']);

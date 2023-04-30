@@ -46,6 +46,7 @@ class Student extends Model
         'user_type',
         'status',
         'hash',
+        'block_hash',
         'created_by',
         'updated_by',
     ];
