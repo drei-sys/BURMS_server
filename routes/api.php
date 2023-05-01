@@ -89,6 +89,7 @@ Route::middleware(['auth'])->post('/teacherSubject', [TeacherSubjectController::
 Route::middleware(['auth'])->put('/teacherSubject/{id}', [TeacherSubjectController::class, 'update']);
 Route::middleware(['auth'])->delete('/teacherSubject/{id}', [TeacherSubjectController::class, 'destroy']);
 
+Route::middleware(['auth'])->get('/grades', [GradeController::class, 'getAll']);
 Route::middleware(['auth'])->get('/gradesTPOV/{syId}', [GradeController::class, 'getAllBySyId']);
 Route::middleware(['auth'])->get('/gradesSPOV/{syId}/{studentId}', [GradeController::class, 'getAllBySyIdStudentId']);
 Route::middleware(['auth'])->get('/gradesRPOV/{studentId}', [GradeController::class, 'getAllByStudentId']);

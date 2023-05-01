@@ -29,6 +29,7 @@ class Grade extends Model
         'remarks',
         'status',
         'hash',
+        'block_hash',
         'created_by',
         'updated_by',     
     ];

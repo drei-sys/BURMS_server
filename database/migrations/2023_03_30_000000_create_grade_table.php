@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('remarks');
             $table->string('status');
             $table->string('hash');
+            $table->string('block_hash')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();

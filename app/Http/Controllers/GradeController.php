@@ -14,6 +14,23 @@ use Carbon\Carbon;
 class GradeController extends Controller
 {
     //
+    public function getAll(Request $request): JsonResponse
+    {
+        $grades = Grade::select(
+            'grade.*',
+            'student.lastname as student_lastname', 'student.firstname as firstname', 'student.middlename as student_middlename', 'student.extname as student_extname',
+            'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname',
+            'course.name as course_name'
+        )
+            ->join('student', 'grade.student_id', '=', 'student.id')
+            ->join('teacher', 'grade.teacher_id', '=', 'teacher.id')
+            ->join('course', 'grade.course_id', '=', 'course.id')
+            ->where('sy_id', $syId)->get();
+
+        return response()->json($grades);
+    }
+
+
     public function getAllBySyId(Request $request, $syId): JsonResponse
     {
         $grades = Grade::select('grade.*', 'teacher.lastname as teacher_lastname', 'teacher.firstname as firstname', 'teacher.middlename as teacher_middlename', 'teacher.extname as teacher_extname')
