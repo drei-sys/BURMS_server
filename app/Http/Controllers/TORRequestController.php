@@ -76,6 +76,13 @@ class TORRequestController extends Controller
         return response()->noContent();
     }
 
+    public function updateTORRequestUserBlockHash(Request $request, $id): Response
+    {            
+        TORRequest::find($id)->update([ 'block_hash' => $request->block_hash ]);
+        
+        return response()->noContent();
+    }
+
     public function destroy(Request $request, $id): Response
     {            
         TORRequest::find($id)->update([ 'status'=> 'Deleted' ]);

@@ -106,6 +106,7 @@ Route::middleware(['auth'])->get('/torRequest/{id}', [TORRequestController::clas
 Route::middleware(['auth'])->get('/torRequest/{id}', [TORRequestController::class, 'getOne']);
 Route::middleware(['auth'])->post('/torRequest', [TORRequestController::class, 'store']);
 Route::middleware(['auth'])->put('/torRequest/{id}', [TORRequestController::class, 'update']);
+Route::middleware(['auth'])->put('/torRequestBlockHash/{id}', [TORRequestController::class, 'updateTORRequestUserBlockHash']);
 Route::middleware(['auth'])->put('/torRequestReject/{id}', [TORRequestController::class, 'reject']);
 Route::middleware(['auth'])->delete('/torRequest/{id}', [TORRequestController::class, 'destroy']);
 
