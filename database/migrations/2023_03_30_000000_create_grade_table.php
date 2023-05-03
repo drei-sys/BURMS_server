@@ -30,9 +30,8 @@ return new class extends Migration
             $table->decimal('grade', 8, 2);
             $table->decimal('rating', 8, 2);
             $table->string('remarks');
-            $table->string('status');
-            $table->string('hash');
-            $table->string('block_hash')->nullable();
+            $table->string('status');            
+            $table->text('block_hash')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();

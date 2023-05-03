@@ -13,8 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -199,8 +197,7 @@ class UserController extends Controller
                 'award_received' => $request->award_received,
                 'sh_school_strand' => $request->sh_school_strand,  
                 'course_id' => $request->course_id,
-                'year_level' => $request->year_level,
-                'hash'=> Hash::make(Carbon::now()),            
+                'year_level' => $request->year_level,                
                 'status'=> 'Uneditable',            
             ]);            
         }else if($user->user_type === "Teacher") {
@@ -237,8 +234,7 @@ class UserController extends Controller
                 'college_remarks' => $request->college_remarks,
                 'graduate_studies_school' => $request->graduate_studies_school,
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
-                'work_experiences' => $request->work_experiences,              
-                'hash'=> Hash::make(Carbon::now()),            
+                'work_experiences' => $request->work_experiences,                              
                 'status'=> 'Uneditable',            
             ]);            
         }else if($user->user_type === "Non Teaching") {
@@ -275,8 +271,7 @@ class UserController extends Controller
                 'college_remarks' => $request->college_remarks,
                 'graduate_studies_school' => $request->graduate_studies_school,
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
-                'work_experiences' => $request->work_experiences,              
-                'hash'=> Hash::make(Carbon::now()),            
+                'work_experiences' => $request->work_experiences,                              
                 'status'=> 'Uneditable',            
             ]);            
         }else if($user->user_type === "Registrar") {
@@ -313,8 +308,7 @@ class UserController extends Controller
                 'college_remarks' => $request->college_remarks,
                 'graduate_studies_school' => $request->graduate_studies_school,
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
-                'work_experiences' => $request->work_experiences,              
-                'hash'=> Hash::make(Carbon::now()),            
+                'work_experiences' => $request->work_experiences,                              
                 'status'=> 'Uneditable',            
             ]);            
         }else if($user->user_type === "Dean") {
@@ -351,8 +345,7 @@ class UserController extends Controller
                 'college_remarks' => $request->college_remarks,
                 'graduate_studies_school' => $request->graduate_studies_school,
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
-                'work_experiences' => $request->work_experiences,              
-                'hash'=> Hash::make(Carbon::now()),            
+                'work_experiences' => $request->work_experiences,                              
                 'status'=> 'Uneditable',            
             ]);            
         }else if($user->user_type === "DeptChair") {
@@ -389,8 +382,7 @@ class UserController extends Controller
                 'college_remarks' => $request->college_remarks,
                 'graduate_studies_school' => $request->graduate_studies_school,
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
-                'work_experiences' => $request->work_experiences,                
-                'hash'=> Hash::make(Carbon::now()),            
+                'work_experiences' => $request->work_experiences,                                
                 'status'=> 'Uneditable',            
             ]);            
         }

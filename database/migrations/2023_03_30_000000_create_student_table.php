@@ -45,9 +45,8 @@ return new class extends Migration
             $table->string('email');
             $table->integer('course_id');
             $table->string('year_level');
-            $table->string('user_type');
-            $table->string('hash');
-            $table->string('block_hash')->nullable();
+            $table->string('user_type');            
+            $table->text('block_hash')->nullable();
             $table->string('status');
             $table->integer('created_by');
             $table->integer('updated_by');

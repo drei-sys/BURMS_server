@@ -15,9 +15,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Carbon\Carbon;
 
 class RegisteredUserController extends Controller
 {
@@ -78,8 +76,7 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'course_id' => $request->course_id,
                 'year_level' => $request->year_level,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,            
@@ -121,8 +118,7 @@ class RegisteredUserController extends Controller
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
                 'work_experiences' => $request->work_experiences,
                 'email' => $request->email,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
@@ -164,8 +160,7 @@ class RegisteredUserController extends Controller
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
                 'work_experiences' => $request->work_experiences,
                 'email' => $request->email,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
@@ -207,8 +202,7 @@ class RegisteredUserController extends Controller
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
                 'work_experiences' => $request->work_experiences,
                 'email' => $request->email,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
@@ -250,8 +244,7 @@ class RegisteredUserController extends Controller
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
                 'work_experiences' => $request->work_experiences,
                 'email' => $request->email,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       
@@ -293,8 +286,7 @@ class RegisteredUserController extends Controller
                 'graduate_studies_remarks' => $request->graduate_studies_remarks,
                 'work_experiences' => $request->work_experiences,
                 'email' => $request->email,
-                'user_type' => $request->user_type,
-                'hash' => Hash::make(Carbon::now()),
+                'user_type' => $request->user_type,                
                 'status' => 'Uneditable',                
                 'created_by' => $user->id,
                 'updated_by' => $user->id,       

@@ -49,9 +49,8 @@ return new class extends Migration
             $table->string('graduate_studies_remarks')->nullable();
             $table->text('work_experiences')->nullable();
             $table->string('email');
-            $table->string('user_type');
-            $table->string('hash');
-            $table->string('block_hash')->nullable();
+            $table->string('user_type');            
+            $table->text('block_hash')->nullable();
             $table->string('status');            
             $table->integer('created_by');
             $table->integer('updated_by');            

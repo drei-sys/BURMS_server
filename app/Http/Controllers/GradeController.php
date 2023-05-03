@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
 class GradeController extends Controller
@@ -77,8 +76,7 @@ class GradeController extends Controller
             'final_grade' => $request->final_grade,
             'grade' => $request->grade,
             'rating' => $request->rating,
-            'remarks' => $request->remarks,
-            'hash'=> Hash::make(Carbon::now()),
+            'remarks' => $request->remarks,            
             'status' => $request->status,
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,            
@@ -105,8 +103,7 @@ class GradeController extends Controller
             'final_grade' => $request->final_grade,
             'grade' => $request->grade,
             'rating' => $request->rating,
-            'remarks' => $request->remarks,
-            'hash'=> Hash::make(Carbon::now()),
+            'remarks' => $request->remarks,            
             'status' => $request->status,
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,  

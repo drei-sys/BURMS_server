@@ -4,9 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
-
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -55,8 +52,7 @@ class NonTeachingFactory extends Factory
             'graduate_studies_remarks' => null,
             'work_experiences' => '[]',
             'email' => fake()->unique()->safeEmail(),            
-            'user_type' => 'Non Teaching',
-            'hash' => Hash::make(Carbon::now()),
+            'user_type' => 'Non Teaching',            
             'status' => 'Uneditable',                   
         ];
     }

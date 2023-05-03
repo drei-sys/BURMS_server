@@ -100,7 +100,9 @@ Route::middleware(['auth'])->get('/students', [StudentController::class, 'getAll
 Route::middleware(['auth'])->get('/student/{id}', [StudentController::class, 'getOne']);
 
 Route::middleware(['auth'])->get('/torRequests', [TORRequestController::class, 'getAll']);
+Route::middleware(['auth'])->get('/torRequestsApproved', [TORRequestController::class, 'getAllApproved']);
 Route::middleware(['auth'])->get('/torRequests/{studentId}', [TORRequestController::class, 'getAllByStudentId']);
+Route::middleware(['auth'])->get('/torRequest/{id}', [TORRequestController::class, 'getOne']);
 Route::middleware(['auth'])->get('/torRequest/{id}', [TORRequestController::class, 'getOne']);
 Route::middleware(['auth'])->post('/torRequest', [TORRequestController::class, 'store']);
 Route::middleware(['auth'])->put('/torRequest/{id}', [TORRequestController::class, 'update']);

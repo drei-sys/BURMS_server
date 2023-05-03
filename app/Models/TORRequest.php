@@ -15,6 +15,7 @@ class TORRequest extends Model
         'student_id',
         'reason',
         'remarks',
+        'block_hash',
         'status',
         'created_by',
         'updated_by',

@@ -18,7 +18,8 @@ return new class extends Migration
             $table->integer('student_id');
             $table->string('reason');
             $table->string('remarks');            
-            $table->string('status');            
+            $table->string('block_hash')->nullable();
+            $table->string('status');
             $table->integer('created_by');
             $table->integer('updated_by');            
             $table->timestamps();
