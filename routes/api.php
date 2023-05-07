@@ -16,6 +16,9 @@ use App\Http\Controllers\GradeController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TORRequestController;
 use App\Http\Controllers\TORItemController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\BlockchainFileUploadController;
+
 
 
 /*
@@ -111,3 +114,13 @@ Route::middleware(['auth'])->put('/torRequestReject/{id}', [TORRequestController
 Route::middleware(['auth'])->delete('/torRequest/{id}', [TORRequestController::class, 'destroy']);
 
 Route::middleware(['auth'])->post('/torItem', [TORItemController::class, 'store']);
+
+Route::middleware(['auth'])->get('/announcements', [AnnouncementController::class, 'getAll']);
+Route::middleware(['auth'])->get('/announcement/{id}', [AnnouncementController::class, 'getOne']);
+Route::middleware(['auth'])->post('/announcement', [AnnouncementController::class, 'store']);
+Route::middleware(['auth'])->put('/announcement/{id}', [AnnouncementController::class, 'update']);
+Route::middleware(['auth'])->delete('/announcement/{id}', [AnnouncementController::class, 'destroy']);
+
+Route::middleware(['auth'])->get('/blockchainUploadFileReleasedDocs', [BlockchainFileUploadController::class, 'getAllReleasedDocs']);
+Route::middleware(['auth'])->get('/blockchainUploadFileDigitalizedFiles', [BlockchainFileUploadController::class, 'getAllDigitalizedFiles']);
+Route::middleware(['auth'])->post('/blockchainUploadFile', [BlockchainFileUploadController::class, 'store']);
