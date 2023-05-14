@@ -23,7 +23,15 @@ class ChangePasswordController extends Controller
     {
         $request->validate([
             'oldPassword' => ['required'],            
-            'newPassword' => ['required', Rules\Password::defaults()],
+            'newPassword' => [
+                'required', 
+                Rules\Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
         ]);
 
         #Match The Old Password

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Hash;
 
 class RegisteredUserController extends Controller
 {
@@ -28,7 +29,16 @@ class RegisteredUserController extends Controller
     {
         $request->validate([            
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required', 
+                'confirmed', 
+                Rules\Password::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+            ],
         ]);
 
         $user = User::create([
@@ -53,7 +63,13 @@ class RegisteredUserController extends Controller
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
-                'address' => $request->address,
+                'house_number' => $request->house_number,
+                'street' => $request->street,
+                'subdivision' => $request->subdivision,
+                'barangay' => $request->barangay,
+                'city' => $request->city,
+                'province' => $request->province,
+                'zipcode' => $request->zipcode,
                 'civil_status' => $request->civil_status,
                 'contact' => $request->contact,
                 'is_cabuyeno' => $request->is_cabuyeno,

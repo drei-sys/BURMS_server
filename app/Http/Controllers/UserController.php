@@ -63,7 +63,7 @@ class UserController extends Controller
 
     public function getOne(Request $request, $id): JsonResponse
     {
-        $user = User::where('status', 'Verified')->find($id);
+        $user = User::find($id);
         if($user){
             if($user->user_type === "Student"){
                 $userDetails = Student::find($id);
@@ -176,7 +176,13 @@ class UserController extends Controller
                 'birth_date' => $request->birth_date,
                 'birth_place' => $request->birth_place,
                 'gender' => $request->gender,
-                'address' => $request->address,
+                'house_number' => $request->house_number,
+                'street' => $request->street,
+                'subdivision' => $request->subdivision,
+                'barangay' => $request->barangay,
+                'city' => $request->city,
+                'province' => $request->province,
+                'zipcode' => $request->zipcode,
                 'civil_status' => $request->civil_status,
                 'contact' => $request->contact,
                 'is_cabuyeno' => $request->is_cabuyeno,

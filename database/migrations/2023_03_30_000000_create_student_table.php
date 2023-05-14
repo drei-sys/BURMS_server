@@ -22,7 +22,13 @@ return new class extends Migration
             $table->string('birth_date');
             $table->string('birth_place');
             $table->string('gender');
-            $table->string('address');
+            $table->string('house_number');
+            $table->string('street');
+            $table->string('subdivision');
+            $table->string('barangay');
+            $table->string('city');
+            $table->string('province');
+            $table->string('zipcode');
             $table->string('civil_status');
             $table->string('contact');
             $table->string('is_cabuyeno');
